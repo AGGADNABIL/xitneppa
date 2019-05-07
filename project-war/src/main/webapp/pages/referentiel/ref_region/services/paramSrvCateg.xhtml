@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="#{prezmsg['AFFECT_SERV']}">
+			<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+			<h:form id="formGLobal">
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+				
+
+
+              <center>
+				<p:fieldset  styleClass="fieldset2" >
+
+						<p:dataTable id="categTbl" paginator="true"
+							rowStyleClass="#{categ.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{categoriesSearchMBean}" var="categ" lazy="true" rows="5"
+							selection="#{servicesCategMBean.webBean.categorie}"
+							selectionMode="single" rowKey="#{categ.id}"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,20"
+							currentPageReportTemplate="Affichant {startRecord} - {endRecord} de 
+      				    {totalRecords}, Page: {currentPage}/{totalPages}">
+
+							<p:ajax event="rowSelect"
+								listener="#{servicesCategMBean.fetchServicesForCat}"
+								update=":formGLobal:services-dtbl" />
+
+							<p:column headerText="#{prezmsg['CODE_CATEG']}"
+								style="text-align:center" width="40%">
+								<h:outputText value="#{categ.codeCateg}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['LIB_CATEG']}">
+								<h:outputText value="#{categ.libelleCateg}" />
+							</p:column>
+
+
+						</p:dataTable>
+					</p:fieldset>
+					</center>
+						<br></br>
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{categorieMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-etudiant').show();" />
+<!-- 							<p:menuitem id="search" icon="ui-icon-custom-chercher" -->
+<!-- 								value="#{prezmsg['CHERCHER']}" oncomplete="" /> -->
+						</p:menubar>
+						
+						<p:dataTable id="services-dtbl" paginator="true" rows="5" 
+							value="#{servicesCategMBean.webBean.vos}" var="service"  rowKey="#{service.id}"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,20"
+							paginatorPosition="bottom"
+							currentPageReportTemplate="Affichant {startRecord} - {endRecord} de 
+      				    {totalRecords}, Page: {currentPage}/{totalPages}">
+					
+					<!--     CODE SERVICE -->
+							<p:column headerText="#{prezmsg['CODE_SERV']}"
+								style="text-align:center" width="30%">
+								<h:outputLabel value="#{service.codeService}" />
+							</p:column>
+					<!--     LIBELLE SERVICE -->
+
+                            <p:column headerText="#{prezmsg['LIB_SERV']}" >
+								<h:outputLabel value="#{service.libelleService}" />
+							</p:column>
+							
+							
+                      <!--	ACTION -->
+                      
+                      	<p:column exportable="false" style="text-align:center;" headerText="#{prezmsg['ACTION']}" width="20%">
+
+							<p:commandButton icon="ui-icon-custom-modifier"
+								update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+								styleClass="CrudButton">
+								<f:setPropertyActionListener value="#{service}"
+									target="#{servicesCategMBean.webBean.vo}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-custom-supprimer" update="@form" 
+								styleClass="CrudButton" oncomplete="PF('widget_deletedlg').show();"
+								action="#{servicesCategMBean.supprimer}">
+								<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}" 
+									message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+									icon="ui-icon-alert"  />
+								<f:setPropertyActionListener value="#{service}"
+									target="#{servicesCategMBean.webBean.vo}" />
+							</p:commandButton>
+
+						</p:column>
+						</p:dataTable>
+						
+						
+						
+					</div>
+				</div>
+			</h:form>
+
+
+<!-- 			<p:overlayPanel id="search-overlay" for=":formGLobal:search" -->
+<!-- 				hideEffect="slide" showEffect="slide" widgetVar="searchOverlay" -->
+<!-- 				dismissable="false" appendToBody="true"> -->
+
+<!-- 				<h:form> -->
+
+<!-- 					<h:panelGrid columns="4"> -->
+<!-- 				 Code service -->
+<!-- 					<h:outputLabel value="#{prezmsg['CODE_SERV']}" /> -->
+<!-- 					<p:inputText id="code-search" -->
+<!-- 						value="#{servicesCategSearchMBean.serviceCriteria.codeService}" /> -->
+
+<!-- 					Libellé service  -->
+<!-- 					<h:outputLabel value="#{prezmsg['LIB_SERV']}" /> -->
+<!-- 					<p:inputText id="lib-search" -->
+<!-- 						value="#{servicesCategSearchMBean.serviceCriteria.libelleService}" /> -->
+<!-- 				</h:panelGrid> -->
+
+<!-- 				<p:commandButton value="#{prezmsg['OK']}" -->
+<!-- 					action="#{servicesCategSearchMBean.run}" ajax="true" -->
+<!-- 					update=":formGLobal:services-dtbl" -->
+<!-- 					onclick="PF('searchOverlay').hide();" > -->
+<!-- 					<f:setPropertyActionListener value="#{servicesCategMBean.selectedCategorie.codeCateg}" target="#{servicesCategSearchMBean.serviceCriteria.codeCateg}" /> -->
+<!-- 					</p:commandButton> -->
+						
+
+<!-- 				</h:form> -->
+
+<!-- 			</p:overlayPanel> -->
+
+			<ui:include
+				src="/pages/referentiel/ref_region/services/creerServicesCateg.xhtml"></ui:include>
+			<ui:include
+				src="/pages/referentiel/ref_region/services/editerServicesCateg.xhtml"></ui:include>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

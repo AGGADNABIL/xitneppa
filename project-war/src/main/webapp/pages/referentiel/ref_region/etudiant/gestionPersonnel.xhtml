@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+	<head>
+</head>
+
+	<ui:define name="content">
+        <p:fieldset legend="#{prezmsg['GESTION_PERSONNEL']}">
+		<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+	  <h:form id="verification">
+	  <center>
+	     <p:messages autoUpdate="true" globalOnly="true"/>
+	     <h:panelGrid columns="8" cellpadding="2" >
+	        <p:column>
+	     	     <h:outputLabel value="#{prezmsg['NUM_EMP']}"/>  	          
+	     
+	       </p:column>
+	       <p:column>
+
+	        <h:inputText id="j_code"  value="#{personnelMBean.webBean.vo.numEmploi}"  styleClass="textcenter" />	       
+	       </p:column>
+	       <p:column>
+	       	     <p:tooltip id="codeFocus" for="j_code" showEffect="clip" hideEffect="explode"/>	       
+	       </p:column>
+	       
+	        <!--      MATRICULE     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['MATR']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="matr1"  value="#{personnelMBean.webBean.vo.matr}" styleClass="textcenter" />
+	     </p:column>    
+	     
+<!--        RECHERCHER        -->
+            <p:column>            
+	            <p:commandButton  id="search" value="#{prezmsg['RECHERCHER']}"
+							icon="ui-icon-custom-chercher" 
+				       action="#{personnelMBean.chargerInfos}"
+					 update="verification"/></p:column>
+			<p:column>
+			  <p:message for="j_code"
+			  /></p:column>
+	     </h:panelGrid></center>
+ 	
+		 <hr/>	
+		 
+	<p:accordionPanel multiple="true">
+        <p:tab title="#{prezmsg['IDENTIFICATION']}" >
+           	        
+           
+              <h:panelGrid columns="2" cellpadding="2" cellspacing="4" id="informations" style="padding-left:40px;">
+
+	        
+<!--      NOM DE NAISSANCE     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['NOMNAISS']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="j_nom"  value="#{personnelMBean.webBean.vo.nomNaissance}" disabled="true"/>
+	     </p:column>     
+		<p:column>
+	       <h:outputLabel value="#{prezmsg['PRENOM']}"/>  
+	    </p:column> 
+	    <p:column>  
+	        <h:inputText id="j_prenom"  value="#{personnelMBean.webBean.vo.prenom}" disabled="true"/>
+	     </p:column>
+	     <!--      NOM MARITAL     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['NOM_MARITAL']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="j_nom_mar"  value="#{personnelMBean.webBean.vo.nomMarital}" disabled="true"/>
+	     </p:column>   
+<!-- 	  SEXE         -->   
+          <p:column>
+	        <h:outputLabel value="#{prezmsg['SEXE']}"/>  
+	      </p:column>
+	      <p:column>
+	        <h:inputText id="j_sexe"  value="#{personnelMBean.webBean.vo.sexe}" disabled="true"/>
+	       </p:column>
+<!-- 	    DATE DE NAISSANCE       -->
+           <p:column>           
+	        <h:outputLabel value="#{prezmsg['DATENAISS']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button" value="#{personnelMBean.webBean.vo.dateNaissance}" pattern="dd/MM/yyyy" showOn="button" readonly="true"/>
+	         </p:column> 
+<!-- 	     LIEU DE NAISSANCE     -->
+            <p:column>           
+	          <h:outputLabel value="#{prezmsg['LIEUNAISS']}"/> 
+	         </p:column>
+	         <p:column>            
+	          <h:inputText id="j_lieu"  value="#{personnelMBean.webBean.vo.lieuNaissance}" disabled="true"/>
+	          </p:column>
+<!-- 	         NATIONALITE       -->
+              <p:column>                         
+	            <h:outputLabel value="#{prezmsg['NATIONALITE']}"/> </p:column> 
+	          <p:column>                         	       
+	            <h:inputText id="j_nationalite"  value="#{personnelMBean.webBean.vo.nationalite}" disabled="true"/>
+	          </p:column>
+<!-- 	          ADRESSE EMAIL     -->
+               <p:column>                                        
+	           <h:outputLabel value="#{prezmsg['EMAIL']}"/> </p:column> 
+	            <p:column>
+	           <h:inputText id="j_email"  value="#{personnelMBean.webBean.vo.email}" disabled="true" /></p:column>
+	     </h:panelGrid>
+        </p:tab>
+        <p:tab title="#{prezmsg['EMPLOI']}" >
+            <h:panelGrid columns="2" cellpadding="2" cellspacing="4" style="padding-left:40px">
+            
+            <!-- 	    DATE D'EMBAUCHE      -->
+          <p:column>           
+	        <h:outputLabel value="#{prezmsg['DATE_EMBAUCH']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button2" value="#{personnelMBean.webBean.vo.dateEmbauche}" pattern="dd/MM/yyyy" showOn="button" readonly="true"/>
+	      </p:column> 	          
+ 			<!-- 	   STRUCTURE D'AFFECTATION      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['STRUCT_AFFECT']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="affect"  value="#{personnelMBean.webBean.vo.structAffect}" disabled="true"/>
+	      </p:column> 
+	      	<!-- 	   CLASSIFICATION      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['CLASSIF']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="classif"  value="#{personnelMBean.webBean.vo.classification}" disabled="true"/>
+	      </p:column> 
+	      <!-- 	   GRADE      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['GRADE']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="grade"  value="#{personnelMBean.webBean.vo.grade}" disabled="true"/>
+	      </p:column> 
+	      <!-- 	   CATEGORIE      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['CATEGORIE']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="categ"  value="#{personnelMBean.webBean.vo.categorie}" disabled="true"/>
+	      </p:column>          
+	        </h:panelGrid>
+        </p:tab>
+        <p:tab title="#{prezmsg['CARTE_PROF']}" >
+           	 <h:panelGrid columns="2" cellpadding="2" cellspacing="4" id="carte" style="padding-left:40px;">
+                  <!--   	 DATE DE DELIVRANCE DE CARTE -->
+            	  <p:column>           
+                       <h:outputLabel value="#{prezmsg['DATE_DELIV']}"/>  
+	             </p:column>
+           		  <p:column>           	       
+	           		   <p:calendar id="deliv" value="#{personnelMBean.webBean.vo.dateDeliv}" pattern="dd/MM/yyyy" showOn="button" readonly="true"/>          				           			
+	      		   </p:column> 
+	      		   <!--   	 DATE D'EXPIRATION DE CARTE -->
+	      		    
+	      		   <p:column>           
+                       <h:outputLabel value="#{prezmsg['DATE_EXP']}"/>  
+	             </p:column>
+           		  <p:column>           	       
+	           		   <p:calendar id="exp" value="#{personnelMBean.webBean.vo.dateExpiration}" pattern="dd/MM/yyyy" showOn="button" readonly="true"/>          				           			
+	      		   </p:column>  
+	      		    
+	      		  
+           	  </h:panelGrid>
+         </p:tab>
+       
+    </p:accordionPanel>
+       <h:panelGrid columns="4" cellpadding="4" cellspacing="8" style="padding-left:20%">
+           <center>
+        	 <p:column><p:commandButton  id="valider" value="#{prezmsg['VALIDER_INFO']}"
+				       action="#{personnelMBean.valider}"
+					 update="verification" style="width:120px;"/>
+			 </p:column>
+       		  <p:column>
+         			<p:commandButton  id="acquisition" value="#{prezmsg['AQUIS_IMG']}"				       
+					 update="verification" style="width:180px;"/>
+         	
+         	</p:column>
+        	 <p:column>
+        		 <p:commandButton  id="imprimer" value="#{prezmsg['IMPRIMER']}"
+				       action="#{personnelMBean.imprimer}"
+					 update="verification" style="width:120px;"/>
+        	 </p:column> 
+         </center>
+        </h:panelGrid>             
+	 </h:form>					
+	</p:fieldset>
+  </ui:define>
+</ui:composition>
+

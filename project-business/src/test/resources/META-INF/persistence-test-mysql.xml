@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<!-- transaction-type is RESOURCE_LOCAL or JTA -->
+	<persistence-unit name="projectPersistenceUnitTest">
+
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+		<class>com.tyba.technicalServices.audit.impl.TraceEntity</class>
+
+		<!--<class>com.tyba.project.business.referentiel.model.Nationalite</class>
+
+		 Avoid to scan *.class and *.hbm.xml -->
+		 <class>com.tyba.appentix.business.materiel.model.Materiels</class>
+		  <class>com.tyba.appentix.business.referentiel.model.Services</class>
+		<exclude-unlisted-classes />
+		<properties>
+			<!-- replace with correct database dialect -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+
+			<!-- externalisé vers applicationContext-db.xml, déclaré comme bean Datasource -->
+			 <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" 
+				/> <property name="hibernate.connection.url" value="jdbc:mysql://127.0.0.1/appentix" 
+				/> <property name="hibernate.connection.username" value="root" /> <property 
+				name="hibernate.connection.password" value="" /> 
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.connection.release_mode" value="auto" />
+
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+			<!-- cache Second level -->
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<!-- <property name="hibernate.cache.region.factory_class" value="org.hibernate.cache.ehcache.EhCacheRegionFactory" 
+				/> -->
+			<property name="hibernate.cache.region.factory_class"
+				value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
+
+
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.cache.provider_configuration_file_resource_path"
+				value="/cache/ehcache.xml" />
+		</properties>
+	</persistence-unit>
+</persistence>

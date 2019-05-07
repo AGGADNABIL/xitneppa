@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd"
+	version="2.1">
+
+	<lifecycle>
+		<phase-listener>com.tyba.technicalServices.web.ValidationPhaseListener</phase-listener>
+	</lifecycle>
+
+	<application>
+		<message-bundle>messages.erreurs</message-bundle>
+	</application>
+
+	<navigation-rule>
+		<from-view-id>*</from-view-id>
+		<navigation-case>
+			<from-action>#{loginMBean.doLogin}</from-action>
+			<from-outcome>loginSuccess</from-outcome>
+			<to-view-id>/pages/commun/listMenus.xhtml</to-view-id>
+<!-- 			 <to-view-id>/pages/materiel/identification/gestionMateriel.xhtml</to-view-id> -->
+			 <!-- /pages/referentiel/ref_region/services/gestionServices.xhtml -->
+		</navigation-case>
+		<navigation-case>
+			<from-action>#{loginMBean.logout}</from-action>
+			<from-outcome>homePage</from-outcome>
+			 <to-view-id>/pages/login.xhtml</to-view-id>
+		</navigation-case>
+		
+	</navigation-rule>
+	
+
+</faces-config>

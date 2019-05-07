@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+	<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+	<ui:define name="content">
+        <p:fieldset legend="#{prezmsg['GESTION_ETUDIANT']}">
+		<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+	  <h:form id="verification">
+	  <center>
+	   <p:messages autoUpdate="true" globalOnly="true"/>
+	     <h:panelGrid columns="6" cellpadding="2" >
+	        <p:column>
+	     	     <h:outputLabel value="#{prezmsg['CODE_ETUDIANT']}"/>  	          
+	     
+	       </p:column>
+	       <p:column>
+
+	        <h:inputText id="j_code" required="true" value="#{etudiantsMBean.webBean.vo.idEtudiant}" requiredMessage="#{prezmsg['SAISIE_CODE_ETUDIANT']}" styleClass="textcenter" />	       
+	       </p:column>
+	       <p:column>
+	       	     <p:tooltip id="codeFocus" for="j_code" showEffect="clip" hideEffect="explode"/>	       
+	       </p:column>
+	     
+<!--        RECHERCHER        -->
+            <p:column>            
+	            <p:commandButton  id="search" value="#{prezmsg['RECHERCHER']}"
+							icon="ui-icon-custom-chercher" 
+				       action="#{etudiantsMBean.chargerInfosEtudiant}"
+					 update="verification"/></p:column>
+			<p:column>
+			  <p:message for="j_code"
+			  /></p:column>
+	     </h:panelGrid></center>
+ 	
+		 <hr/>	
+		 
+	<p:accordionPanel multiple="true">
+        <p:tab title="Identification" >
+           	        
+           
+              <h:panelGrid columns="2" cellpadding="2" cellspacing="4" id="informations" style="padding-left:40px;">
+
+<!--      NOM DE NAISSANCE     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['NOMNAISS']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="j_nom"  value="#{etudiantsMBean.webBean.vo.nomNaissEtudiant}" disabled="true" />
+	     </p:column>     
+<!--      Prénom    -->
+		<p:column>
+	       <h:outputLabel value="#{prezmsg['PRENOM']}"/>  
+	    </p:column> 
+	    <p:column>  
+	        <h:inputText id="j_prenom"  value="#{etudiantsMBean.webBean.vo.prenomEtudiant}" disabled="true"/>
+	     </p:column>
+<!-- 	  SEXE         -->   
+          <p:column>
+	        <h:outputLabel value="#{prezmsg['SEXE']}"/>  
+	      </p:column>
+	      <p:column>
+	        <h:inputText id="j_sexe"  value="#{etudiantsMBean.webBean.vo.sexeEtudiant}" disabled="true"/>
+	       </p:column>
+<!-- 	    DATE DE NAISSANCE       -->
+           <p:column>           
+	        <h:outputLabel value="#{prezmsg['DATENAISS']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button" value="#{etudiantsMBean.webBean.vo.dateNaissEtudiant}" pattern="dd/MM/yyyy" showOn="button" readonly="true"/>
+	         </p:column> 
+<!-- 	     LIEU DE NAISSANCE     -->
+            <p:column>           
+	          <h:outputLabel value="#{prezmsg['LIEUNAISS']}"/> 
+	         </p:column>
+	         <p:column>            
+	          <h:inputText id="j_lieu"  value="#{etudiantsMBean.webBean.vo.lieuNaissEtudiant}" disabled="true"/>
+	          </p:column>
+<!-- 	         NATIONALITE       -->
+              <p:column>                         
+	            <h:outputLabel value="#{prezmsg['NATIONALITE']}"/> </p:column> 
+	          <p:column>                         	       
+	            <h:inputText id="j_nationalite"  value="#{etudiantsMBean.webBean.vo.nationaliteEtudiant}" disabled="true"/>
+	          </p:column>
+<!-- 	          ADRESSE EMAIL     -->
+               <p:column>                                        
+	           <h:outputLabel value="#{prezmsg['EMAIL']}"/> </p:column> 
+	            <p:column>
+	           <h:inputText id="j_email"  value="#{etudiantsMBean.webBean.vo.adreEmailEtudiant}" disabled="true"/></p:column>
+	     </h:panelGrid>
+        </p:tab>
+        <p:tab title="Formation" >
+            <h:panelGrid columns="2" cellpadding="2" cellspacing="4" style="padding-left:40px">
+               <!-- 	        ETABLISSEMENT 1   -->
+               <p:column>
+	            <h:outputLabel value="#{prezmsg['ETAB1']}"/></p:column>
+	            <p:column>
+	            <h:inputText id="j_etab1" value="#{etudiantsMBean.webBean.vo.etab1Etudiant}" disabled="true"/></p:column>
+	          
+ <!-- 	        ETABLISSEMENT 2   -->
+	      <p:column>    
+	       <h:outputLabel value="#{prezmsg['ETAB2']}"/>  </p:column>
+	       <p:column>
+	        <h:inputText id="j_etab2"  value="#{etudiantsMBean.webBean.vo.etab2Etudiant}" disabled="true"/></p:column>
+	          
+<!-- 	         BOURSE           -->
+	        <p:column>  
+	        <h:outputLabel value="#{prezmsg['BOURSE']}"/> </p:column> 
+	       <p:column>
+	        <p:selectBooleanCheckbox value="#{etudiantsMBean.bourse}" disabled="true" />
+	        
+	        </p:column>
+
+<!-- 	         NIVEAU SECTION 1           -->
+            <p:column>
+             <h:outputLabel value="#{prezmsg['NIVSEC1']}"/>  </p:column>
+	       <p:column>
+	        <h:inputText id="j_nivsec1"  value="#{etudiantsMBean.webBean.vo.nivSect1Etudiant}" disabled="true"/></p:column>
+	          
+<!-- 	         NIVEAU SECTION 2           -->
+	         <p:column> 
+	           <h:outputLabel value="#{prezmsg['NIVSEC2']}"/> </p:column> 
+	       <p:column>
+	        <h:inputText id="j_nivsec2"  value="#{etudiantsMBean.webBean.vo.nivSect2Etudiant}" disabled="true"/></p:column>
+	          
+<!-- 	         ANNEE ACADEMIQUE           -->
+	          <p:column>
+	           <h:outputLabel value="#{prezmsg['ANNEE_ACADEM']}"/> </p:column> 
+	       <p:column>
+	        <h:inputText id="j_ann_acad"  value="#{etudiantsMBean.webBean.vo.annAcademiqueEtudiant}" disabled="true"/></p:column>
+	          
+ <!-- 	         INFO BU                 -->
+	          <p:column>
+	           <h:outputLabel value="#{prezmsg['INFOBU']}"/> </p:column> 
+	       <p:column>
+	         <p:selectBooleanCheckbox value="#{etudiantsMBean.infobu}" disabled="true"/>	        
+	        </p:column>
+
+ <!-- 	         INFO COUD               -->
+	       <p:column>   
+	        <h:outputLabel value="#{prezmsg['INFOCOUD']}"/>  </p:column>
+	       <p:column>   	        
+	       	 <p:selectBooleanCheckbox value="#{etudiantsMBean.infocloud}" disabled="true" />
+	        </p:column>
+	          
+ <!-- 	         CODE A BARRE             -->
+	       <p:column>   	        	          
+	           <h:outputLabel value="#{prezmsg['CODEABARRE']}"/>  </p:column>
+	       <p:column>
+	        <h:inputText id="j_code_abarre" value="#{etudiantsMBean.webBean.vo.codeBarreEtudiant}" disabled="true"/>
+<!-- 	         <p:barcode value="#{etudiantsMBean.webBean.vo.codeBarreEtudiant}" type="codabar"/> -->
+					</p:column> 
+	        </h:panelGrid>
+        </p:tab>
+       
+    </p:accordionPanel>
+       <h:panelGrid columns="4" cellpadding="4" cellspacing="8" style="padding-left:20%">
+           <center>
+        	 <p:column><p:commandButton  id="valider" value="#{prezmsg['VALIDER_INFO']}"
+				       action="#{etudiantsMBean.valider}"
+					 update="verification" style="width:120px;"/>
+			 </p:column>
+       		  <p:column>
+         			<p:commandButton  id="acquisition" value="#{prezmsg['AQUIS_IMG']}"				       
+					 update="verification" style="width:180px;"/>
+         	
+         	</p:column>
+        	 <p:column>
+        		 <p:commandButton  id="imprimer" value="#{prezmsg['IMPRIMER']}"
+				       action="#{etudiantsMBean.imprimer}"
+					 update="verification" style="width:120px;"/>
+        	 </p:column> 
+         </center>
+        </h:panelGrid> 
+            
+	 </h:form>					
+	</p:fieldset>
+  </ui:define>
+</ui:composition>
+

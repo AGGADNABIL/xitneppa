@@ -1,0 +1,106 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg-materiel" widgetVar="create-dlg-materiel"
+		header="Nouveau Materiel" hideEffect="fade" showEffect="fade"
+		modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="4">
+
+				<h:outputLabel value="code materiel" />
+				<h:panelGroup>
+					<p:inputText id="reference-create"
+						value="#{materielMBean.webBean.vo.reference}" />
+					<p:message for="reference-create" />
+				</h:panelGroup>
+
+
+				<h:outputLabel value="Libelle" />
+				<h:panelGroup>
+					<p:inputText id="libelle-create"
+						value="#{materielMBean.webBean.vo.libelle}" />
+					<p:message for="libelle-create" />
+				</h:panelGroup>
+
+
+				<h:outputLabel value="matricule" />
+				<h:panelGroup>
+					<p:inputText id="matricule-creae"
+						value="#{materielMBean.webBean.vo.matricule}" />
+					<p:message for="matricule-creae" />
+				</h:panelGroup>
+
+				<h:outputLabel value="model" />
+				<h:panelGroup>
+					<p:inputText id="model-creat"
+						value="#{materielMBean.webBean.vo.model}" />
+					<p:message for="model-creat" />
+				</h:panelGroup>
+
+				<p:outputLabel value="type Materiel:" />
+				<h:panelGroup>
+					<p:selectOneMenu id="console" value="#{materielMBean.type}"
+						effect="fold" editable="true">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItems value="#{materielMBean.typesMateriel}" />
+					</p:selectOneMenu>
+					<p:message for="console" />
+				</h:panelGroup>
+				<p:outputLabel value="Marque:" />
+				<h:panelGroup>
+					<p:selectOneMenu id="console1" value="#{materielMBean.type}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+						<f:selectItem itemLabel="PS4" itemValue="PS4" />
+						<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+					</p:selectOneMenu>
+					<p:message for="console" />
+				</h:panelGroup>
+				<p:outputLabel value="list Chantier:" />
+				<h:panelGroup>
+					<p:selectOneMenu id="console2" value="#{materielMBean.type}">
+						<f:selectItem itemLabel="Select One" itemValue="" />
+						<f:selectItem itemLabel="Xbox One" itemValue="Xbox One" />
+						<f:selectItem itemLabel="PS4" itemValue="PS4" />
+						<f:selectItem itemLabel="Wii U" itemValue="Wii U" />
+					</p:selectOneMenu>
+					<p:message for="console" />
+				</h:panelGroup>
+
+				<h:outputLabel value="date identification" />
+				<h:panelGroup>
+					<p:calendar id="date-create"
+						value="#{materielMBean.webBean.vo.dateIdentification}" />
+					<p:message for="date-create" />
+				</h:panelGroup>
+
+				<h:outputLabel value="Description" />
+				<h:panelGroup>
+					<p:inputTextarea id="description-create" rows="5" cols="30"
+						maxlength="500" autoResize="false"
+						value="#{materielMBean.webBean.vo.description}" />
+					<p:message for="description-create" />
+
+				</h:panelGroup>
+
+				<p:commandButton value="#{prezmsg['VALIDER']}"
+					action="#{materielMBean.creer}" update="@form"
+					styleClass="editButtons" />
+
+				<p:remoteCommand name="_hideDialog"
+					oncomplete="PF('create-dlg-materiel').hide()"
+					update=":formGLobal:materielTbl" />
+			</h:panelGrid>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

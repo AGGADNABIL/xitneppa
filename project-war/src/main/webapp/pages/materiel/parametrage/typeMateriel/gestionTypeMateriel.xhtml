@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menuPrim.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="#{prezmsg['PARAMETRAGE_TYPE_MATERIEL']}">
+			<center>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<p:graphicImage library="images" name="ajax-loader-1.gif" style="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</center>
+			<h:form id="formGLobal">
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{typeMaterielMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-typeMateriel').show();" />
+							<p:menuitem id="search" icon="ui-icon-custom-chercher"
+								value="#{prezmsg['CHERCHER']}" oncomplete="" />
+
+						</p:menubar>
+
+
+
+
+													<center><p:panelGrid columns="2"  id="typeMaterielDetail" style="padding:auto; display=block;text-align:center;">
+
+														<h:outputLabel value="#{prezmsg['REFERENCE_TYPEMATERIEL']}" />
+														<p:inputText id="reference-view" readonly="true"
+															value="#{typeMaterielMBean.webBean.vo.reference}" />
+														
+
+
+														<h:outputLabel value="#{prezmsg['LIBELLE_TYPEMATERIEL']}" />
+														<p:inputText id="libelle-view" readonly="true"
+															value="#{typeMaterielMBean.webBean.vo.libelle}" />
+														
+
+														<h:outputLabel value="#{prezmsg['DESCRIPTION_TYPEMATERIEL']}" />
+														<p:inputText id="description-view" readonly="true"
+															value="#{typeMaterielMBean.webBean.vo.description}" />
+														
+
+													</p:panelGrid>
+
+						</center>
+
+						<p:dataTable id="typeMaterielTbl" paginator="true"
+							rowStyleClass="#{typeMateriel.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{typeMaterielSearchMBean}" var="typeMateriel" lazy="true"
+							selectionMode="single" rowKey="#{typeMateriel.typeId}"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							rows="10" style="margin-bottom:20px">
+
+							<ui:include src="/pages/commun/datatableEvents.xhtml" />
+							<p:ajax event="rowSelect"
+								listener="#{typeMaterielMBean.onRowSelect}"
+								update=":formGLobal:typeMaterielDetail" />
+							<!-- EXPORTEURS -->
+							<f:facet name="{Exporters}">
+								<h:commandLink style="margin-left:70px">
+									<p:graphicImage library="images" name="icons/excel.png"
+										width="24" />
+									<p:dataExporter type="xls" target="typeMaterielTbl"
+										fileName="TypeMateriel" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/pdf.png"
+										width="24" />
+									<p:dataExporter type="pdf" target="typeMaterielTbl"
+										fileName="TypeMateriel" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/csv.png"
+										width="24" />
+									<p:dataExporter type="csv" target="typeMaterielTbl"
+										fileName="TypeMateriel" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/xml.png"
+										width="24" />
+									<p:dataExporter type="xml" target="typeMaterielTbl"
+										fileName="TypeMateriel" />
+								</h:commandLink>
+
+							</f:facet>
+							<!--       COLUMNS    -->
+
+
+							<p:column headerText="#{prezmsg['REFERENCE_TYPEMATERIEL']}"
+								sortBy="#{typeMateriel.reference}" style="text-align:center">
+								<h:outputText value="#{typeMateriel.reference}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['LIBELLE_TYPEMATERIEL']}"
+								sortBy="#{typeMateriel.libelle}">
+								<h:outputText value="#{typeMateriel.libelle}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['DESCRIPTION_TYPEMATERIEL']}"
+								sortBy="#{typeMateriel.description}">
+								<h:outputText value="#{typeMateriel.description}" />
+							</p:column>
+
+
+
+							<p:column exportable="false" style="text-align:center;"
+								headerText="#{prezmsg['ACTION']}">
+
+								<p:commandButton icon="ui-icon-custom-modifier"
+									update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+									styleClass="CrudButton">
+									<f:setPropertyActionListener value="#{typeMateriel}"
+										target="#{typeMaterielMBean.webBean.vo}" />
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-custom-supprimer"
+									update="typeMaterielTbl" styleClass="CrudButton"
+									oncomplete="PF('widget_deletedlg').show();"
+									action="#{typeMaterielMBean.supprimer}">
+									<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+										message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{typeMateriel}"
+										target="#{typeMaterielMBean.webBean.vo}" />
+								</p:commandButton>
+
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</h:form>
+
+
+			<p:overlayPanel id="search-overlay" for=":formGLobal:search"
+				hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+				dismissable="false" appendToBody="true">
+
+				<h:form>
+
+					<h:panelGrid columns="4">
+
+						<!-- Reference TYPEMATERIEL -->
+						<h:outputLabel value="#{prezmsg['REFERENCE_TYPEMATERIEL']}" />
+						<p:inputText id="code-search"
+							value="#{typeMaterielSearchMBean.typeMaterielCriteria.reference}" />
+
+						<!-- type TYPEMATERIEL  -->
+						<h:outputLabel value="#{prezmsg['LIBELLE_TYPEMATERIEL']}" />
+						<p:inputText id="lib-search"
+							value="#{typeMaterielSearchMBean.typeMaterielCriteria.libelle}" />
+
+						<!-- description TYPEMATERIEL  -->
+						<h:outputLabel value="#{prezmsg['DESCRIPTION_TYPEMATERIEL']}" />
+						<p:inputText id="desc-search"
+							value="#{typeMaterielSearchMBean.typeMaterielCriteria.description}" />
+					</h:panelGrid>
+
+					<p:commandButton value="#{prezmsg['OK']}"
+						action="#{typeMaterielSearchMBean.run}" ajax="true"
+						update=":formGLobal:typeMaterielTbl"
+						onclick="PF('searchOverlay').hide();" />
+
+				</h:form>
+
+			</p:overlayPanel>
+
+			<ui:include
+				src="/pages/materiel/parametrage/typeMateriel/creerTypeMateriel.xhtml"></ui:include>
+			<ui:include
+				src="/pages/materiel/parametrage/typeMateriel/editerTypeMateriel.xhtml"></ui:include>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

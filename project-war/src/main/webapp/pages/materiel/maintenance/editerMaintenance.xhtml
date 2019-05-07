@@ -1,0 +1,90 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_MAINTENANCE']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+				
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.MATERIEL']}" />
+				<p:inputText id="materiel-edit"
+					value="#{maintenanceMBean.webBean.vo.materiel}" />
+				<p:message for="materiel-edit" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.CENTRE']}" />
+				<p:inputText id="centre-edit"
+					value="#{maintenanceMBean.webBean.vo.centreMaintenance}" />
+				<p:message for="centre-edit" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.MOTIF']}" />
+				<p:inputText id="motif-edit"
+					value="#{maintenanceMBean.webBean.vo.motif}" />
+				<p:message for="motif-edit" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.TECHNICIEN']}" />
+				<p:inputText id="technicien-edit"
+					value="#{maintenanceMBean.webBean.vo.technicien}" />
+				<p:message for="technicien-edit" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.FRAIS']}" />
+				<p:inputText id="frais-edit"
+					value="#{maintenanceMBean.webBean.vo.frais}" />
+				<p:message for="frais-edit" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_DEBUT']}" />
+				<p:calendar id="dateDebut-edit"
+					value="#{maintenanceMBean.webBean.vo.dateDebut}"
+					pattern="dd-MM-yyyy" mask="true" />
+				<p:message for="dateDebut-edit" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_FIN']}" />
+				<p:calendar id="dateFin-edit"
+					value="#{maintenanceMBean.webBean.vo.dateFin}" pattern="dd-MM-yyyy"
+					mask="true" />
+				<p:message for="dateFin-edit" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DUREE']}" />
+				<p:inputText id="duree-edit"
+					value="#{maintenanceMBean.webBean.vo.duree}" />
+				<p:message for="duree-edit" />
+
+				 <h:outputLabel value="#{prezmsg['MAINTENANCE.PROB']}" />
+				<p:selectOneRadio id="prob-edit" value="#{maintenanceMBean.webBean.vo.problemFrequent}">
+					<f:selectItem itemLabel="Oui" itemValue="#{true}" />
+					<f:selectItem itemLabel="Non" itemValue="#{false}" />
+				</p:selectOneRadio>
+				<p:message for="prob-edit" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.RAPPORT']}" />
+				<p:inputText id="rapport-edit"
+					value="#{maintenanceMBean.webBean.vo.rapport}" />
+				<p:message for="rapport-edit" /> 
+
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{maintenanceMBean.editer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":formGLobal:maintenanceTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

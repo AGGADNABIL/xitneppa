@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="#{prezmsg['LIST_MARQUES']}">
+			<center>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<p:graphicImage library="images" name="ajax-loader-1.gif" style="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</center>
+			<h:form id="formGLobal">
+
+
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{marqueMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-typeMateriel').show();" />
+							<p:menuitem id="search" icon="ui-icon-custom-chercher"
+								value="#{prezmsg['CHERCHER']}" />
+
+							<!-- 						<p:menuitem id="delete" value="#{prezmsg['SUPPRIMER']}" -->
+							<!-- 							icon="ui-icon-custom-supprimer-min" -->
+							<!-- 							disabled="#{empty TypeMaterielMBean.webBean.selectedVOs}" -->
+							<!-- 							action="#{TypeMaterielMBean.supprimer}" update="typeMaterielTbl"> -->
+							<!-- 						</p:menuitem> -->
+
+						</p:menubar>
+
+						<p:panelGrid columns="2" id="grl">
+
+							<h:outputLabel value="#{prezmsg['LIBELLE_MARK']}" />
+							<h:panelGroup>
+								<p:inputText id="lib-create"
+									value="#{marqueMBean.webBean.vo.libelle}" readonly="true" />
+								<p:message for="lib-create" />
+							</h:panelGroup>
+							<h:outputLabel value="#{prezmsg['DESCRIP_MARK']}" />
+							<h:panelGroup>
+								<p:inputText id="desc-create"
+									value="#{marqueMBean.webBean.vo.description}" />
+								<p:message for="desc-create" />
+							</h:panelGroup>
+						</p:panelGrid>
+
+						<p:dataTable id="typeMaterielTbl" paginator="true"
+							rowStyleClass="#{marque.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{marquesSearchMBean}" var="marque" lazy="true"
+							selectionMode="single" rowKey="#{marque.id}"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							rows="10" style="margin-bottom:20px">
+							<!-- @author nabil  -->
+							<p:ajax event="rowSelect" listener="#{marqueMBean.onRowSelect}"
+								update=":formGLobal:grl">
+							</p:ajax>
+
+							<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+							<!-- EXPORTEURS -->
+							<f:facet name="{Exporters}">
+								<h:commandLink style="margin-left:70px">
+									<p:graphicImage library="images" name="icons/excel.png"
+										width="24" />
+									<p:dataExporter type="xls" target="typeMaterielTbl"
+										fileName="marque" />
+								</h:commandLink>
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/pdf.png"
+										width="24" />
+									<p:dataExporter type="pdf" target="typeMaterielTbl"
+										fileName="marque" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/csv.png"
+										width="24" />
+									<p:dataExporter type="csv" target="typeMaterielTbl"
+										fileName="marque" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/xml.png"
+										width="24" />
+									<p:dataExporter type="xml" target="typeMaterielTbl"
+										fileName="marque" />
+								</h:commandLink>
+
+							</f:facet>
+							<!--       COLUMNS    -->
+
+							<p:column headerText="#{prezmsg['LIBELLE_MARK']}">
+								<h:outputText value="#{marque.libelle}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['DESCRIP_MARK']}">
+								<h:outputText value="#{marque.description}" />
+							</p:column>
+
+							<p:column exportable="false" style="text-align:center;"
+								headerText="#{prezmsg['ACTION']}">
+
+								<p:commandButton icon="ui-icon-custom-modifier"
+									update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+									styleClass="CrudButton">
+									<f:setPropertyActionListener value="#{marque}"
+										target="#{marqueMBean.webBean.vo}" />
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-custom-supprimer"
+									update="typeMaterielTbl" styleClass="CrudButton"
+									oncomplete="PF('widget_deletedlg').show();"
+									action="#{marqueMBean.supprimer}">
+									<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+										message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{marque}"
+										target="#{marqueMBean.webBean.vo}" />
+								</p:commandButton>
+
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</h:form>
+			<ui:include src="/pages/parametrage/marque/creerMarque.xhtml" />
+			<ui:include src="/pages/parametrage/marque/editerMarque.xhtml" />
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

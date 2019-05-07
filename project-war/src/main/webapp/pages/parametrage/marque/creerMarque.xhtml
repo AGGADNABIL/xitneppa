@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg" widgetVar="create-dlg-typeMateriel"
+		header="#{prezmsg['NOUVEAU_MARK']}" hideEffect="fade" styleClass="dialogclass"
+		showEffect="fade" modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+			<h:panelGrid columns="3">
+				<h:outputLabel value="#{prezmsg['LIBELLE_MARK']}" />
+				<p:inputText id="libelle-create"
+					value="#{marqueMBean.webBean.vo.libelle}" />
+				<p:message for="libelle-create" />
+
+				<h:outputLabel value="#{prezmsg['DESCRIP_MARK']}" />
+				<p:inputText id="descrip-create"
+					value="#{marqueMBean.webBean.vo.description}" />
+				<p:message for="descrip-create" />
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{marqueMBean.creer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-typeMateriel').hide()"
+				update=":formGLobal:typeMaterielTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

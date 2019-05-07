@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<!-- transaction-type is RESOURCE_LOCAL or JTA -->
+	<persistence-unit name="pocPersistenceUnitTest">
+
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<!-- techique -->
+		<class>com.tyba.technicalServices.security.UserEntity</class>
+		<class>com.tyba.technicalServices.security.RoleEntity</class>
+		<class>com.tyba.technicalServices.audit.impl.TraceEntity</class>
+		<class>com.tyba.technicalServices.security.WinMenu</class>
+
+
+		<!-- metier -->
+		<class>com.tyba.appentix.business.referentiel.model.ProfilMenu</class>
+		<class>com.tyba.appentix.business.referentiel.model.Personnel</class>
+		<class>com.tyba.appentix.business.referentiel.model.Services</class>
+		<class>com.tyba.appentix.business.materiel.model.Materiels</class>
+		<class>com.tyba.appentix.business.referentiel.model.ProfilAcc</class>
+		<class>com.tyba.technicalServices.security.UserEntity</class>
+		<class>com.tyba.appentix.business.materiel.model.Maintenance</class>
+		<class>com.tyba.appentix.business.parametrage.model.Chantiers</class>
+		<class>com.tyba.appentix.business.parametrage.model.TypeMateriel</class>
+		<class>com.tyba.appentix.business.common.Adresse</class>
+        <class>com.tyba.appentix.business.common.Pays</class>
+
+		<!-- Avoid to scan *.class and *.hbm.xml -->
+		<exclude-unlisted-classes />
+		<properties>
+			<!-- replace with correct database dialect -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
+
+			<!-- A externaliser -->
+			<property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/appentix" />
+			<property name="hibernate.connection.username" value="root" />
+			<property name="hibernate.connection.password" value="" />
+
+
+			<!-- use connection Resource defined in the server -->
+			<!-- <property name="hibernate.connection.datasource" value="java:comp/env/jdbc/projectDS" 
+				/> -->
+
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.connection.release_mode" value="auto" />
+			<!-- cache Second level -->
+			<property name="hibernate.cache.use_second_level_cache"
+				value="true" />
+			<property name="hibernate.cache.use_query_cache" value="true" />
+			<property name="hibernate.cache.region.factory_class"
+				value="net.sf.ehcache.hibernate.EhCacheRegionFactory" />
+			<property name="hibernate.generate_statistics" value="true" />
+			<property name="hibernate.cache.provider_configuration_file_resource_path"
+				value="/cache/ehcache.xml" />
+		</properties>
+	</persistence-unit>
+</persistence>

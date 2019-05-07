@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+			<p:fieldset legend="#{prezmsg['LIST_PROFIL']}"  >
+			<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+		<h:form id="formGLobal">
+			<!-- Remote commands -->
+			<p:remoteCommand name="_errorDialog"
+				onstart="PF('error-dlg-wdg').show()" />
+
+			<p:remoteCommand name="_updateCrudMenu" global="false"
+				update="crud-menu" />
+			<!--  -->
+
+			<div class="BackgroundGray">
+				<div class="RefCenter">
+					<p:menubar id="crud-menu">
+						<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+							value="#{prezmsg['NOUVEAU']}"
+							action="#{profilAccMBean.resetWebBeanVO}"
+							oncomplete="PF('create-dlg-profil').show();" />
+						<p:menuitem id="search" icon="ui-icon-custom-chercher"
+							value="#{prezmsg['CHERCHER']}" oncomplete="" />
+					
+					
+					</p:menubar>
+
+					<p:dataTable id="profilTbl" paginator="true"
+					     rowStyleClass="#{p.statut == 'DISABLED' ? 'is-disabled' :null }"					
+						value="#{profilAccSearchMBean}" var="p" lazy="true" 
+						selection="#{profilAccMBean.webBean.selectedVOs}"
+						rowKey="#{p.id}" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                		 rows="10" style="margin-bottom:20px">
+
+						<ui:include src="/pages/commun/datatableEvents.xhtml" />
+				<!-- EXPORTEURS -->
+				<f:facet name="{Exporters}" >
+        		    <h:commandLink style="margin-left:70px">
+             		   <p:graphicImage library="images" name="icons/excel.png" width="24"/>
+              		  	<p:dataExporter type="xls" target="profilTbl" fileName="Profils" />
+          			 </h:commandLink>
+ 
+         		   <h:commandLink>
+           		     <p:graphicImage library="images" name="icons/pdf.png" width="24"/>
+               		 <p:dataExporter type="pdf" target="profilTbl" fileName="Profils"/>
+           			 </h:commandLink>
+ 
+           		 <h:commandLink>
+              	  <p:graphicImage library="images" name="icons/csv.png" width="24"/>
+              	  <p:dataExporter type="csv" target="profilTbl" fileName="Profils" />
+          		  </h:commandLink>
+ 
+         		   <h:commandLink>
+          		      <p:graphicImage library="images" name="icons/xml.png" width="24"/>
+             		   <p:dataExporter type="xml" target="profilTbl" fileName="Profils" />
+       		     		</h:commandLink>
+
+					</f:facet>
+				<!--       COLUMNS    -->
+
+
+						<p:column headerText="#{prezmsg['CODE']}" sortBy="#{p.codeProAcc}"  style="text-align:center">
+							<h:outputText value="#{p.codeProAcc}" />
+						</p:column>
+
+						<p:column headerText="#{prezmsg['LIBELLE']}" sortBy="#{p.libPro}">
+							<h:outputText value="#{p.libPro}" />
+						</p:column>
+
+
+
+						<p:column exportable="false" style="text-align:center;" headerText="#{prezmsg['ACTION']}">
+
+							<p:commandButton icon="ui-icon-custom-modifier"
+								update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+								styleClass="CrudButton">
+								<f:setPropertyActionListener value="#{p}"
+									target="#{profilAccMBean.webBean.vo}" />
+							</p:commandButton> 
+
+							<p:commandButton icon="ui-icon-custom-supprimer" update="profilTbl"
+								styleClass="CrudButton" oncomplete="PF('widget_deletedlg').show();"
+								action="#{profilAccMBean.supprimer}">
+								<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+									message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+									icon="ui-icon-alert" />
+								<f:setPropertyActionListener value="#{p}"
+									target="#{profilAccMBean.webBean.vo}" />
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+		
+
+		<p:overlayPanel id="search-overlay" for=":formGLobal:search"
+			hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+			dismissable="false" appendToBody="true">
+
+			<h:form>
+
+				<h:panelGrid columns="4">
+
+
+				
+
+					<h:outputLabel value="#{prezmsg['CODE']}" />
+					<p:inputText id="code-search"
+						value="#{profilAccSearchMBean.criteria.codeProAcc}" />
+
+					<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+					<p:inputText id="lib-search"
+						value="#{profilAccSearchMBean.criteria.libPro}" />
+				</h:panelGrid>
+
+				<p:commandButton value="#{prezmsg['OK']}"
+					action="#{profilAccSearchMBean.run}" ajax="true"
+					update=":formGLobal:profilTbl"
+					onclick="PF('searchOverlay').hide();"  />
+
+			</h:form>
+
+		</p:overlayPanel>
+
+		<ui:include
+			src="/pages/referentiel/ref_region/administration/creerProfil.xhtml"></ui:include>
+		<ui:include
+			src="/pages/referentiel/ref_region/administration/editerProfil.xhtml"></ui:include>
+</p:fieldset>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="List Materiel">
+			<center>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<p:graphicImage library="images" name="ajax-loader-1.gif" style="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</center>
+			<h:form id="formGLobal">
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="NOUVEAU" action="#{materielMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-materiel').show();" />
+							<p:menuitem id="search" icon="ui-icon-custom-chercher"
+								value="#{prezmsg['CHERCHER']}" oncomplete="" />
+
+
+
+						</p:menubar>
+
+
+						<h:panelGrid columns="4" id="affich">
+
+							<h:outputLabel value="code materiel" />
+							<h:panelGroup>
+								<p:inputText id="reference-edi"
+									value="#{materielMBean.webBean.vo.reference}" />
+								<p:message for="reference-edi" />
+
+							</h:panelGroup>
+
+
+							<h:outputLabel value="Libelle" />
+							<h:panelGroup>
+								<p:inputText id="libelle-edi"
+									value="#{materielMBean.webBean.vo.libelle}" />
+								<p:message for="libelle-edi" />
+							</h:panelGroup>
+
+
+							<h:outputLabel value="matricule" />
+							<h:panelGroup>
+								<p:inputText id="matricule-edi"
+									value="#{materielMBean.webBean.vo.matricule}" />
+								<p:message for="matricule-edi" />
+							</h:panelGroup>
+
+							<h:outputLabel value="model" />
+							<h:panelGroup>
+								<p:inputText id="model-edi"
+									value="#{materielMBean.webBean.vo.model}" />
+								<p:message for="model-edi" />
+							</h:panelGroup>
+
+
+							<h:outputLabel value="date identification" />
+							<h:panelGroup>
+								<p:calendar id="date-edi"
+									value="#{materielMBean.webBean.vo.dateIdentification}" />
+								<p:message for="date-edi" />
+							</h:panelGroup>
+
+							<h:outputLabel value="Description" />
+							<h:panelGroup>
+								<p:inputTextarea id="description-edi" rows="5" cols="30"
+									maxlength="500" autoResize="false"
+									value="#{materielMBean.webBean.vo.description}" />
+								<p:message for="description-edi" />
+
+							</h:panelGroup>
+							<h:panelGrid columns="4">
+
+
+							</h:panelGrid>
+						</h:panelGrid>
+
+						<p:dataTable id="materielTbl" paginator="true"
+							rowStyleClass="#{materiel.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{materielsSearchMBean}" var="materiel" lazy="true"
+							selectionMode="single"
+						
+							rowKey="#{materiel.id}" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							rows="10" style="margin-bottom:20px">
+
+							<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+							<!-- EXPORTEURS -->
+							<f:facet name="{Exporters}">
+								<h:commandLink style="margin-left:70px">
+									<p:graphicImage library="images" name="icons/excel.png"
+										width="24" />
+
+									<p:dataExporter type="xls" target="materielTbl"
+										fileName="materiels" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/pdf.png"
+										width="24" />
+									<p:dataExporter type="pdf" target="materielTbl"
+										fileName="materiels" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/csv.png"
+										width="24" />
+									<p:dataExporter type="csv" target="materielTbl"
+										fileName="materiels" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/xml.png"
+										width="24" />
+									<p:dataExporter type="xml" target="materielTbl"
+										fileName="materiels" />
+								</h:commandLink>
+
+							</f:facet>
+							<!--       COLUMNS    -->
+							<p:ajax event="rowSelect"
+								listener="#{materielMBean.onRowSelect}" update=":formGLobal:affich" />
+							<p:column headerText="Code Materiel"
+								sortBy="#{materiel.reference}" style="text-align:center">
+								<h:outputText value="#{materiel.reference}" />
+							</p:column>
+							<p:column headerText="reference">
+								<h:outputText value="#{materiel.reference}" />
+							</p:column>
+							<p:column headerText="matricule">
+								<h:outputText value="#{materiel.matricule}" />
+							</p:column>
+							<p:column headerText="model">
+								<h:outputText value="#{materiel.model}" />
+							</p:column>
+							<p:column headerText="Date">
+								<h:outputText value="#{materiel.dateIdentification}" />
+							</p:column>
+							<p:column headerText="Description">
+								<h:outputText value="#{materiel.description}" />
+							</p:column>
+							<p:column exportable="false" style="text-align:center;"
+								headerText="#{prezmsg['ACTION']}">
+
+								<p:commandButton icon="ui-icon-custom-modifier"
+									update=":edit-dlg"
+									oncomplete="PF('update-dlg-materiel').show();"
+									styleClass="CrudButton">
+									<f:setPropertyActionListener value="#{materiel}"
+										target="#{materielMBean.webBean.vo}" />
+								</p:commandButton>
+
+
+								<p:commandButton icon="ui-icon-custom-supprimer"
+									update="materielTbl" styleClass="CrudButton"
+									oncomplete="PF('widget_deletedlg').show();"
+									action="#{materielMBean.supprimer}">
+									<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+										message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{materiel}"
+										target="#{materielMBean.webBean.vo}" />
+								</p:commandButton>
+
+							</p:column>
+
+
+
+
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</h:form>
+
+
+
+			<ui:include src="/pages/materiel/ficheMateriel/creerMateriel.xhtml"></ui:include>
+
+			<ui:include src="/pages/materiel/ficheMateriel/editMateriel.xhtml"></ui:include>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

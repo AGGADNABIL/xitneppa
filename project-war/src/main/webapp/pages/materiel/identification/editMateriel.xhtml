@@ -1,0 +1,81 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="update-dlg-materiel"
+		header="Editer materiel" hideEffect="fade" showEffect="fade"
+		modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="4">
+
+				<h:outputLabel value="code materiel" />
+				<h:panelGroup>
+					<p:inputText id="reference-edit"
+						value="#{materielMBean.webBean.vo.reference}" />
+					<p:message for="reference-edit" />
+			
+				</h:panelGroup>
+
+
+				<h:outputLabel value="Libelle" />
+				<h:panelGroup>
+					<p:inputText id="libelle-edit" 
+						value="#{materielMBean.webBean.vo.libelle}" />
+					<p:message for="libelle-edit" />
+				</h:panelGroup>
+
+
+				<h:outputLabel value="matricule" />
+				<h:panelGroup>
+					<p:inputText id="matricule-edit"
+						value="#{materielMBean.webBean.vo.matricule}" />
+					<p:message for="matricule-edit" />
+				</h:panelGroup>
+
+				<h:outputLabel value="model" />
+				<h:panelGroup>
+					<p:inputText id="model-edit"
+						value="#{materielMBean.webBean.vo.model}" />
+					<p:message for="model-edit" />
+				</h:panelGroup>
+
+
+				<h:outputLabel value="date identification" />
+				<h:panelGroup>
+					<p:calendar id="date-edit"
+						value="#{materielMBean.webBean.vo.dateIdentification}" />
+					<p:message for="date-edit" />
+				</h:panelGroup>
+
+				<h:outputLabel value="Description" />
+				<h:panelGroup>
+					<p:inputTextarea id="description-edit" rows="5" cols="30"
+						 maxlength="500" autoResize="false"
+						value="#{materielMBean.webBean.vo.description}" />
+					<p:message for="description-edit" />
+
+				</h:panelGroup>
+
+
+				<center>
+					<p:commandButton value="#{prezmsg['VALIDER']}"
+						action="#{materielMBean.editer}" update="@form"
+						styleClass="editButtons" />
+				</center>
+				<p:remoteCommand name="_hideDialog"
+					oncomplete="PF('update-dlg-materiel').hide()"
+					update=":formGLobal:materielTbl" />
+			</h:panelGrid>
+		</h:form>
+
+
+	</p:dialog>
+
+</ui:composition>

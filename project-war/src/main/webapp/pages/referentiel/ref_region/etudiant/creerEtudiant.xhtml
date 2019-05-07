@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg-etudiant" widgetVar="create-dlg-etudiant"
+		header="#{prezmsg['NOUVEAU_ETUDIANT']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+
+			
+				<h:outputLabel value="#{prezmsg['ID_ETUDIANT']}" />
+				<p:inputText id="id-create"
+					value="#{etudiantsMBean.webBean.vo.idEtudiant}" />
+				<p:message for="id-create" />
+
+			
+				<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+				<p:inputText id="nom-create"
+					value="#{etudiantsMBean.webBean.vo.nomNaissEtudiant}" />
+				<p:message for="nom-create" />
+
+		
+				<h:outputLabel value="#{prezmsg['PRENOM']}" />
+				<p:inputText id="prenom-create"
+					value="#{etudiantsMBean.webBean.vo.prenomEtudiant}" />
+				<p:message for="prenom-create" />
+				
+<!-- 				<h:outputLabel value="#{prezmsg['DATENAISS_ETUDIANT']}" /> -->
+<!-- 				<p:inputText id="datenaissance-create" -->
+<!-- 					value="#{etudiantsMBean.webBean.vo.dateNaissEtudiant}" /> -->
+<!-- 				<p:message for="datenaissance-create" /> -->
+
+			</h:panelGrid>
+
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{etudiantsMBean.creer}" update="@form"
+				styleClass="editButtons" />
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-etudiant').hide()"
+				update=":etudiant-form:etudiant-dtbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

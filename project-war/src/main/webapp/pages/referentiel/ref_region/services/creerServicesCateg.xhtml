@@ -1,0 +1,78 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg-etudiant" widgetVar="create-dlg-etudiant" 
+		header="#{prezmsg['NOUVEAU_SERVICE']}" hideEffect="fade" styleClass="dialogclass"
+		showEffect="fade" modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form id="form2">
+
+			<h:panelGrid columns="3">
+					
+			<h:outputLabel value="#{prezmsg['CODE']}" />
+				<p:inputText id="code-create" readonly="true"
+					value="#{servicesCategMBean.webBean.vo.codeService}" />
+
+				<p:commandButton icon="ui-icon-custom-nouveau" type="button"
+							onclick="PF('ajouterService-dlg-wdg').show()" />
+				<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+				<p:inputText id="lib-create" readonly="true"
+					value="#{servicesCategMBean.webBean.vo.libelleService}" />
+				<p:spacer/>
+
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{servicesCategMBean.creer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-etudiant').hide()"
+				update=":formGLobal:services-dtbl" />
+
+		</h:form>
+		
+		<!-- 			DIALOG SERVICES     -->
+			<p:dialog id="ajouterService-dlg" width="900" height="400" header="Ajouter un service" appendTo="@(body)"
+				widgetVar="ajouterService-dlg-wdg" modal="true">
+				<center>
+				<h:form id="form3">
+				<h:panelGrid columns="6" id="searchGrid4">
+							<h:outputLabel value="#{prezmsg['CODE']}" />
+							<p:inputText value="#{servicesSearchMBean.serviceCriteria.codeService}"/>
+							
+							<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+							<p:inputText value="#{servicesSearchMBean.serviceCriteria.libelleService}"/>
+							<br></br>
+
+							<p:commandButton id="search" icon="ui-icon-custom-chercher"
+							 action="#{servicesSearchMBean.run}" ajax="true"
+							update=":form3:service-dtbl" />
+						</h:panelGrid>
+						<p:dataTable id="service-dtbl" paginator="true" lazy="true" rows="5"  rowKey="#{p.codeService}" selectionMode="single"
+							value="#{servicesSearchMBean}" var="p" paginatorPosition="bottom"
+							selection="#{servicesCategMBean.webBean.selectedService}">
+							
+							<p:ajax event="rowDblselect" listener="#{servicesCategMBean.onRowDblClckSelect}" update=":form2:code-create :form2:lib-create" oncomplete="PF('ajouterService-dlg-wdg').hide()"/>
+							<p:column headerText="#{prezmsg['CODE']}" sortBy="#{p.codeService}">
+								<h:outputText value="#{p.codeService}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['LIBELLE']}"  sortBy="#{p.libelleService}">
+								<h:outputText value="#{p.libelleService}" />
+							</p:column>
+							
+						</p:dataTable>
+				</h:form>
+			</center>
+          </p:dialog>
+
+	</p:dialog>
+
+</ui:composition>

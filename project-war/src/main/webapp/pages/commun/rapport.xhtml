@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+	  xmlns:f="http://java.sun.com/jsf/core"
+	  xmlns:ui="http://java.sun.com/jsf/facelets">
+   
+															
+<h:form id="dlgrapportMsgForm" >	
+	    
+<p:panelGrid styleClass="barreErreurs" style="width : 100%">
+<p:row>
+<p:column>
+
+	    
+<c:if test="#{sessionScope.userSession.report.error}">
+
+<div id="dlgform1:messages" class="ui-messages ui-widget" data-detail="data-detail" data-summary="data-summary" aria-live="polite">
+<div class="ui-messages-error ui-corner-all">
+    <p:commandLink styleClass="ui-messages-close ui-icon  ui-icon-close"  
+                   onclick="$(this).parent().slideUp();return false;" 
+                   global="false"
+                   href="#">
+    </p:commandLink>
+    <span class="ui-messages-error-icon"></span>
+    <ul>
+        <li>
+            <span class="ui-messages-error-summary">
+
+               <h:outputText value="Erreur :  " /> 
+
+            </span>
+            <span class="ui-messages-error-detail">
+
+                 <h:panelGroup rendered="#{sessionScope.userSession.report.singleMsg}">
+						<h:outputText style="Color: black" value="#{sessionScope.userSession.report.listMessages.get(0)}" escape="false" />
+				</h:panelGroup>
+
+            </span>
+            <span style="float : right">
+		     <h:panelGroup rendered="#{!sessionScope.userSession.report.singleMsg}">
+		      <p:commandLink global="false" value="Détails" process="@this" update="@none" id="dlgshowErrors" 
+		                     actionListener="#{utilsMBean.openRapportErreurs('/pages/commun/rapport_detail.xhtml' ,'default')}">
+		                     <f:param value="true" name="SKIP_UPDATE_ERROR_KEY" />
+		      </p:commandLink>
+
+		        
+		        
+		 	</h:panelGroup>
+            </span>
+        </li>
+        
+    </ul>
+</div>
+</div>
+</c:if>	    
+
+
+
+<c:if test="#{!sessionScope.userSession.report.error}">
+
+<div id="dlgform1:messages" class="ui-messages ui-widget" data-detail="data-detail" data-summary="data-summary" aria-live="polite">
+<div class="ui-messages-info ui-corner-all">
+    <a class="ui-messages-close" onclick="$(this).parent().slideUp();return false;" href="#">X</a>
+    <span class="ui-messages-info-icon"></span>
+    <ul>
+        <li>
+            <span class="ui-messages-info-summary">
+
+               <h:outputText value="Infos :  " /> 
+
+            </span>
+            <span class="ui-messages-info-detail">
+
+                 <h:panelGroup rendered="#{sessionScope.userSession.report.singleMsg}">
+				      <h:outputText style="Color: black" value="#{sessionScope.userSession.report.listMessages.get(0)}" />
+				 </h:panelGroup>
+
+            </span>
+             <span style="float : right">
+		     <h:panelGroup rendered="#{!sessionScope.userSession.report.singleMsg}">
+		        <p:commandLink global="false" value="Détails" process="@this" update="@none" id="dlgshowErrors" 
+		                     actionListener="#{utilsMBean.openRapportErreurs('/pages/commun/rapport_detail.xhtml' ,'default')}">
+		                     <f:param value="true" name="SKIP_UPDATE_ERROR_KEY" />
+		      </p:commandLink>
+		 	</h:panelGroup>
+            </span>
+        </li>
+    </ul>
+</div>
+</div>
+	    
+</c:if>
+</p:column>
+
+</p:row>
+</p:panelGrid>
+
+	
+</h:form>
+</ui:composition>
+

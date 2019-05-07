@@ -1,0 +1,147 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_PROFIL']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form id="form8">
+
+			<h:panelGrid columns="3">
+
+					<h:outputLabel value="#{prezmsg['NUM_SOLDE']}" />
+					<p:inputText id="matr-edit" 
+						value="#{userEntityMBean.webBean.vo.matr}" />
+					<p:commandButton icon="ui-icon-custom-nouveau" type="button"
+							onclick="PF('editerMatr-dlg-wdg').show()" />
+					<!-- username  -->
+					<h:outputLabel value="#{prezmsg['USERNAME']}" />
+					<p:inputText  id="login-edit"
+						value="#{userEntityMBean.webBean.vo.username}" />
+						<p:spacer/>
+						
+					<!-- lastname  -->
+					<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+					<p:inputText id="nom-edit"
+						value="#{userEntityMBean.webBean.vo.lastName}" />
+					<p:spacer/>
+					<!-- firstname  -->
+					<h:outputLabel value="#{prezmsg['PRENOM']}" />
+					<p:inputText id="prenom-edit"
+						value="#{userEntityMBean.webBean.vo.firstName}" />
+					<p:spacer/>
+					
+					<!-- Population  -->
+					<h:outputLabel value="#{prezmsg['POPULATION']}" />
+						<p:selectOneRadio style="margin-top:10px"
+							value="#{userEntityMBean.webBean.vo.population}">
+						<f:selectItem itemLabel="RH" itemValue="R" />
+						<f:selectItem itemLabel="#{prezmsg['SCOLARITE']}" itemValue="S" />
+						</p:selectOneRadio>
+					<p:spacer/>
+					
+				
+					
+					<!-- Profil  -->
+					<h:outputLabel value="#{prezmsg['PROFIL_ACCES']}" />
+					<p:inputText id="profil-edit"
+						value="#{userEntityMBean.webBean.vo.profil}" />
+					<p:commandButton icon="ui-icon-custom-nouveau" type="button"
+							onclick="PF('editerProfil-dlg-wdg').show()" />
+					
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{userEntityMBean.editer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":formGLobal:usersTbl" />
+
+		</h:form>
+			<!-- 			DIALOG SERVICES     -->
+		<p:dialog id="editerMatr-dlg" width="900" height="400" header="#{prezmsg['EDIT_USER']}" appendTo="@(body)"
+				widgetVar="editerMatr-dlg-wdg" modal="true">
+				<center>
+				<h:form id="form5">
+				<h:panelGrid columns="6" id="searchGrid4">
+							<h:outputLabel value="#{prezmsg['NUM_SOLDE']}" />
+							<p:inputText value="#{personnelSearchMBean.personnelCriteria.matr}"/>
+							
+							<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+							<p:inputText value="#{personnelSearchMBean.personnelCriteria.nomNaissance}"/>
+							
+							<h:outputLabel value="#{prezmsg['PRENOM']}" />
+							<p:inputText value="#{personnelSearchMBean.personnelCriteria.prenom}"/>
+							<br></br>
+
+							<p:commandButton id="search" icon="ui-icon-custom-chercher"
+							 action="#{personnelSearchMBean.run}" ajax="true"
+							update=":form5:perso-dtbl" />
+						</h:panelGrid>
+						<p:dataTable id="perso-dtbl" paginator="true" lazy="true" rows="5"  rowKey="#{p.matr}" selectionMode="single"
+							value="#{personnelSearchMBean}" var="p" paginatorPosition="bottom"
+							selection="#{userEntityMBean.webBean.selectedPerso}">							
+							<p:ajax event="rowDblselect" listener="#{userEntityMBean.onRowDblClckSelect}" update=":form8:matr-edit :form8:nom-edit :form8:prenom-edit :form8:login-edit" oncomplete="PF('editerMatr-dlg-wdg').hide()"/>
+							<p:column headerText="#{prezmsg['NUM_SOLDE']}" sortBy="#{p.matr}">
+								<h:outputText value="#{p.matr}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['NOMNAISS']}"  sortBy="#{p.nomNaissance}">
+								<h:outputText value="#{p.nomNaissance}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['PRENOM']}"  sortBy="#{p.prenom}">
+								<h:outputText value="#{p.prenom}" />
+							</p:column>
+							
+						</p:dataTable>
+				</h:form>
+			</center>
+          </p:dialog>
+          
+          		<!-- 			DIALOG PROFIL     -->
+		<p:dialog id="editerProfil-dlg" width="900" height="400" header="#{prezmsg['AJOUT_PROFIL']}" appendTo="@(body)"
+				widgetVar="editerProfil-dlg-wdg" modal="true">
+				<center>
+				<h:form id="form6">
+				<h:panelGrid columns="6" id="searchGrid4">
+							<h:outputLabel value="#{prezmsg['CODE']}" />
+							<p:inputText value="#{profilAccSearchMBean.criteria.codeProAcc}"/>
+							
+							<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+							<p:inputText value="#{profilAccSearchMBean.criteria.libPro}"/>
+							
+							<br></br>
+
+							<p:commandButton id="search" icon="ui-icon-custom-chercher"
+							 action="#{profilAccSearchMBean.run}" ajax="true"
+							update=":form6:profil-dtbl" />
+						</h:panelGrid>
+						<p:dataTable id="profil-dtbl" paginator="true" lazy="true" rows="5"  rowKey="#{p.codeProAcc}" selectionMode="single"
+							value="#{profilAccSearchMBean}" var="p" paginatorPosition="bottom"
+							selection="#{userEntityMBean.webBean.selectedProfil}">							
+							<p:ajax event="rowDblselect" listener="#{userEntityMBean.onRowDblClckSelectProf}" update=":form8:profil-edit" oncomplete="PF('editerProfil-dlg-wdg').hide()"/>
+							<p:column headerText="#{prezmsg['CODE']}" sortBy="#{p.codeProAcc}">
+								<h:outputText value="#{p.codeProAcc}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['LIBELLE']}"  sortBy="#{p.libPro}">
+								<h:outputText value="#{p.libPro}" />
+							</p:column>
+							
+							
+						</p:dataTable>
+				</h:form>
+			</center>
+          </p:dialog>
+	</p:dialog>
+
+</ui:composition>

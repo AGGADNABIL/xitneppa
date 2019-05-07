@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+			<p:fieldset legend="#{prezmsg['LISTE_ETUDIANT']}"  >
+				<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+		<h:form id="etudiant-form">
+			<!-- Remote commands -->
+			<p:remoteCommand name="_errorDialog"
+				onstart="PF('error-dlg-wdg').show()" />
+
+			<p:remoteCommand name="_updateCrudMenu" global="false"
+				update="crud-menu" />
+			<!--  -->
+
+			<div class="BackgroundGray">
+				<div class="RefCenter">
+					<p:menubar id="crud-menu">
+						<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+							value="#{prezmsg['NOUVEAU']}"
+							action="#{etudiantsMBean.resetWebBeanVO}"
+							oncomplete="PF('create-dlg-etudiant').show();" />
+						<p:menuitem id="search" icon="ui-icon-custom-chercher"
+							value="#{prezmsg['CHERCHER']}" oncomplete="" />
+<!-- 						<p:menuitem id="modify" value="#{prezmsg['EDITER']}" -->
+<!-- 							icon="ui-icon-custom-editer" oncomplete="PF('edit-dlg-wdg').show();" /> -->
+							
+						<p:menuitem id="delete" value="#{prezmsg['SUPPRIMER']}"
+							icon="ui-icon-custom-supprimer-min"
+							disabled="#{empty etudiantsMBean.webBean.selectedVOs}"
+							action="#{etudiantsMBean.supprimer}" update="etudiant-dtbl">
+						</p:menuitem>
+						<!-- 		        <f:facet name="options"> -->
+						<!-- 		          <p:commandButton id="import" value="#{prezmsg['IMPORTER']}" type="button" styleClass="ImportButton" /> -->
+						<!-- 		          <p:commandButton id="export" value="#{prezmsg['EXPORTER']}" type="button" styleClass="ExportButton"> -->
+						<!-- 		            <p:confirmDialog /> -->
+						<!-- 		          </p:commandButton> -->
+						<!-- 		        </f:facet> -->
+					</p:menubar>
+
+					<p:dataTable id="etudiant-dtbl" paginator="true"
+						rowStyleClass="#{etud.statut == 'DISABLED' ? 'is-disabled' :null }"
+						value="#{etudiantsSearchMBean}" var="etud" lazy="true" rows="5"
+						selection="#{etudiantsMBean.webBean.selectedVOs}"
+						rowKey="#{etud.id}" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						rowsPerPageTemplate="5,10,20"
+						currentPageReportTemplate="Affichant {startRecord} - {endRecord} de 
+      				{totalRecords}, Page: {currentPage}/{totalPages}">
+
+						<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+<!-- 						<p:column selectionMode="multiple" styleClass="tableChkbox" -->
+<!-- 							style="width:16px;text-align:center" /> -->
+
+<!-- 						<p:column headerText="#{prezmsg['ID']}" > -->
+<!-- 							<h:outputText value="#{etud.id}" /> -->
+<!-- 						</p:column> -->
+
+						<p:column style="text-align:center;" headerText="#{prezmsg['ID_ETUDIANT']}">
+							<h:outputText value="#{etud.idEtudiant}" />
+						</p:column>
+
+						<p:column headerText="#{prezmsg['NOMNAISS']}">
+							<h:outputText value="#{etud.nomNaissEtudiant}" />
+						</p:column>
+
+						<p:column headerText="#{prezmsg['PRENOM']}">
+							<h:outputText value="#{etud.prenomEtudiant}" />
+						</p:column>
+
+						<!-- 		     <p:column headerText="#{prezmsg['DATENAISS_ETUDIANT']}"> -->
+						<!-- 		             <h:outputText value="#{etud.dateNaissEtudiant}" /> -->
+						<!-- 		     </p:column> -->
+
+
+						<p:column exportable="false" style="text-align:center;" headerText="#{prezmsg['ACTION']}">
+
+							<p:commandButton icon="ui-icon-custom-modifier"
+								update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+								styleClass="CrudButton">
+								<f:setPropertyActionListener value="#{etud}"
+									target="#{etudiantsMBean.webBean.vo}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-custom-supprimer" update="etudiant-dtbl"
+								styleClass="CrudButton" oncomplete="PF('widget_deletedlg').show();"
+								action="#{etudiantsMBean.supprimer}"
+								disabled="#{empty etudiantsMBean.webBean.selectedVOs}"
+								>
+								<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+									message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+									icon="ui-icon-alert" />
+								<f:setPropertyActionListener value="#{etud}"
+									target="#{etudiantsMBean.webBean.vo}" />
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+		
+
+		<p:overlayPanel id="search-overlay" for=":etudiant-form:search"
+			hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+			dismissable="false" appendToBody="true">
+
+			<h:form>
+
+				<h:panelGrid columns="4">
+
+
+					<!-- id de l'etudiants  -->
+					<h:outputLabel value="#{prezmsg['ID_ETUDIANT']}" />
+					<p:inputText id="idEtudiant-search"
+						value="#{etudiantsSearchMBean.etudiantsCriteria.idEtudiant}" />
+
+					<!-- nom etudiants -->
+					<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+					<p:inputText id="nomNaiss-search"
+						value="#{etudiantsSearchMBean.etudiantsCriteria.nomNaissEtudiant}" />
+
+					<!-- prenom etudiants  -->
+					<h:outputLabel value="#{prezmsg['PRENOM']}" />
+					<p:inputText id="prenom-search"
+						value="#{etudiantsSearchMBean.etudiantsCriteria.prenomEtudiant}" />
+				</h:panelGrid>
+
+				<p:commandButton value="#{prezmsg['OK']}"
+					action="#{etudiantsSearchMBean.run}" ajax="true"
+					update=":etudiant-form:etudiant-dtbl"
+					onclick="PF('searchOverlay').hide();" styleClass="editButtons" />
+
+			</h:form>
+
+		</p:overlayPanel>
+
+		<ui:include
+			src="/pages/referentiel/ref_region/etudiant/creerEtudiant.xhtml"></ui:include>
+		<ui:include
+			src="/pages/referentiel/ref_region/etudiant/editerEtudiant.xhtml"></ui:include>
+</p:fieldset>
+	</ui:define>
+</ui:composition>

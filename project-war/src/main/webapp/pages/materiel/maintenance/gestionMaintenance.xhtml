@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="#{prezmsg['LIST_MAINTENANCE']}">
+			<center>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<p:graphicImage library="images" name="ajax-loader-1.gif" style="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</center>
+			<h:form id="formGLobal">
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{maintenanceMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-maintenance').show();" />
+							<p:menuitem id="search" icon="ui-icon-custom-chercher"
+								value="#{prezmsg['CHERCHER']}" oncomplete="" />
+
+						</p:menubar>
+
+
+						<h:panelGrid id="details"
+							rendered="#{not empty maintenanceMBean.webBean.vo}" columns="2"
+							cellpadding="5">
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.MATERIEL']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.materiel}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.CENTRE']}" />
+							<h:outputText
+								value="#{maintenanceMBean.webBean.vo.centreMaintenance}" />
+								<h:outputLabel value="#{prezmsg['MAINTENANCE.MOTIF']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.motif}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.TECHNICIEN']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.technicien}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.FRAIS']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.frais}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_DEBUT']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.dateDebut}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_FIN']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.dateFin}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.DUREE']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.duree}" />
+							<h:outputLabel value="#{prezmsg['MAINTENANCE.PROB']}" />
+							<h:outputText
+								value="#{maintenanceMBean.webBean.vo.problemFrequent}" />
+								<h:outputLabel value="#{prezmsg['MAINTENANCE.RAPPORT']}" />
+							<h:outputText value="#{maintenanceMBean.webBean.vo.rapport}" />
+
+						</h:panelGrid>
+
+						<p:dataTable id="maintenanceTbl" paginator="true"
+							rowStyleClass="#{maintenance.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{maintenanceSearchMBean}"
+							var="maintenance" lazy="true" selectionMode="single"
+							selection="#{maintenanceMBean.webBean.vo}"
+							rowKey="#{maintenance.id}" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							rows="10" style="margin-bottom:20px">
+
+
+							<p:ajax event="rowSelect"
+								listener="#{maintenanceMBean.webBean.onRowSelect}"
+								update=":formGLobal:details" />
+
+							<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+
+							<!-- EXPORTEURS -->
+							<f:facet name="{Exporters}">
+								<h:commandLink style="margin-left:70px">
+									<p:graphicImage library="images" name="icons/excel.png"
+										width="24" />
+									<p:dataExporter type="xls" target="maintenanceTbl"
+										fileName="maintenance" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/pdf.png"
+										width="24" />
+									<p:dataExporter type="pdf" target="maintenanceTbl"
+										fileName="maintenance" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/csv.png"
+										width="24" />
+									<p:dataExporter type="csv" target="maintenanceTbl"
+										fileName="maintenance" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/xml.png"
+										width="24" />
+									<p:dataExporter type="xml" target="maintenanceTbl"
+										fileName="maintenance" />
+								</h:commandLink>
+
+							</f:facet>
+							<!--       COLUMNS    -->
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.MATERIEL']}"
+								sortBy="#{maintenance.materiel}" style="text-align:center">
+								<h:outputText value="#{maintenance.materiel}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.MOTIF']}"
+								sortBy="#{maintenance.motif}">
+								<h:outputText value="#{maintenance.motif}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.CENTRE']}"
+								sortBy="#{maintenance.centreMaintenance}">
+								<h:outputText value="#{maintenance.centreMaintenance}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.TECHNICIEN']}"
+								sortBy="#{maintenance.technicien}">
+								<h:outputText value="#{maintenance.technicien}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.FRAIS']}"
+								sortBy="#{maintenance.frais}">
+								<h:outputText value="#{maintenance.frais}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.DATE_DEBUT']}"
+								sortBy="#{maintenance.dateDebut}">
+								<h:outputText value="#{maintenance.dateDebut}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.DATE_FIN']}"
+								sortBy="#{maintenance.dateFin}">
+								<h:outputText value="#{maintenance.dateFin}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.DUREE']}"
+								sortBy="#{maintenance.duree}">
+								<h:outputText value="#{maintenance.duree}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.PROB']}"
+								sortBy="#{maintenance.problemFrequent}">
+								<h:outputText value="#{maintenance.problemFrequent}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['MAINTENANCE.RAPPORT']}"
+								sortBy="#{maintenance.rapport}">
+								<h:outputText value="#{maintenance.rapport}" />
+							</p:column>
+
+
+							<p:column exportable="false" style="text-align:center;"
+								headerText="#{prezmsg['ACTION']}">
+
+								<p:commandButton icon="ui-icon-custom-modifier"
+									update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+									styleClass="CrudButton">
+									<f:setPropertyActionListener value="#{maintenance}"
+										target="#{maintenanceMBean.webBean.vo}" />
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-custom-supprimer"
+									update="maintenanceTbl" styleClass="CrudButton"
+									oncomplete="PF('widget_deletedlg').show();"
+									action="#{maintenanceMBean.supprimer}">
+									<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+										message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{maintenance}"
+										target="#{maintenanceMBean.webBean.vo}" />
+								</p:commandButton>
+
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</h:form>
+
+
+			<p:overlayPanel id="search-overlay" for=":formGLobal:search"
+				hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+				dismissable="false" appendToBody="true">
+
+				<h:form>
+
+					<h:panelGrid columns="4">
+
+
+						<!-- Libellé maintenance  -->
+						<h:outputLabel value="#{prezmsg['LIB_SERV']}" />
+						<p:inputText id="lib-search"
+							value="#{maintenanceSearchMBean.maintenanceCriteria.materiel}" />
+					</h:panelGrid>
+
+					<p:commandButton value="#{prezmsg['OK']}"
+						action="#{maintenanceSearchMBean.run}" ajax="true"
+						update=":formGLobal:maintenanceTbl"
+						onclick="PF('searchOverlay').hide();" />
+
+				</h:form>
+
+			</p:overlayPanel>
+
+			<ui:include src="/pages/materiel/maintenance/creerMaintenance.xhtml"></ui:include>
+			<ui:include src="/pages/materiel/maintenance/editerMaintenance.xhtml"></ui:include>
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

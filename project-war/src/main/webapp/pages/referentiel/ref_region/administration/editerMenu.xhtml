@@ -1,0 +1,77 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_PROFIL']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="4">
+	
+				<h:outputLabel value="#{prezmsg['MENU']}" />
+				<p:inputText id="nom-create" readonly="true"
+					value="#{profilMenuMBean.webBean.vo.menuMenu}" />
+				<p:message for="nom-create" />
+				<p:spacer/>
+
+		
+				<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+				<p:inputText id="prenom-create"
+					value="#{profilMenuMBean.webBean.vo.libMenu}" />
+				<p:message for="prenom-create" />
+				<p:spacer/>
+				
+				<h:outputLabel value="#{prezmsg['RANG']}" />
+				<p:inputText id="rg-create"
+					value="#{profilMenuMBean.webBean.vo.rang}" />
+				<p:message for="rg-create" />
+				<p:spacer/>
+				
+				<h:outputLabel value="#{prezmsg['FORMULAIRE']}" />
+				<p:inputText id="form-create"
+					value="#{profilMenuMBean.webBean.vo.forma}" />
+				<p:message for="form-create" />
+				<p:spacer/>
+				
+				<h:outputLabel value="#{prezmsg['VISIBLE']}" />
+					<p:selectOneRadio   
+					     	value="#{profilMenuMBean.webBean.vo.valid}">
+							<f:selectItem itemValue="O" itemLabel="Oui" />
+							<f:selectItem itemValue="N" itemLabel="Non" />
+					</p:selectOneRadio>		
+								<p:spacer/>								<p:spacer/>
+								
+						
+				<h:outputLabel value="C/M" />
+				<p:selectOneRadio   
+					     	value="#{profilMenuMBean.webBean.vo.droit}">
+							<f:selectItem itemValue="C" itemLabel="#{prezmsg['CONSULT']}" />
+							<f:selectItem itemValue="M" itemLabel="#{prezmsg['MODIF']}" />
+				</p:selectOneRadio>
+												<p:spacer/>								<p:spacer/>
+				
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{profilMenuMBean.editer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":formGLobal:menus-dtbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

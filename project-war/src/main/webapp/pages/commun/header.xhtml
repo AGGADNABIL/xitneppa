@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+    xmlns:sec="http://www.springframework.org/security/tags">
+ 	
+ 	<p:outputPanel style="height:40px">
+			<div class="HeaderPanel">
+				<h:form>
+					 <ul id="menu" style="display: inline-block;">
+						<li><a>
+                          <p:graphicImage library="images" name="icons/deconnexion.png" style="float:left; margin-top:6px;" />
+									 <h:outputLabel value="Déconnexion" style="float:left;margin-left:6px;" />
+						</a></li>
+						<li style="border-right: 1px solid #fff"><a>
+									<p:graphicImage library="images" name="icons/compte.png" style="float:left; margin-top:6px;"  />
+									<h:outputLabel value="Bienvenue #{loginMBean.userName}" style="float:left;margin-left:6px;" />
+						</a></li>
+					</ul>
+				</h:form>
+			</div>
+	</p:outputPanel>		
+</ui:composition>

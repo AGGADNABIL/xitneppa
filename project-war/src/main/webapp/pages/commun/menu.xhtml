@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<script name="jquery/jquery.js" library="primefaces"></script>
+</h:head>
+<h:form>
+	<p:growl autoUpdate="true" />
+	<p:panelMenu style="width:300px">
+		<p:submenu label="Personel">
+
+		</p:submenu>
+		<p:submenu label="Matériel">
+			<p:submenu label="Paramétrage" icon="ui-icon-wrench">
+				<!--             outcome="/pages/materiel/parametrage/typeMateriel/gestionTypeMateriel.xhtml"  -->
+				<p:menuitem value="Type Matériel"
+					action="#{typeMaterielMBean.redirect}" />
+				<p:menuitem value="Chantier" action="#{chantierMBean.redirect}"/>
+				<p:menuitem value="Fournisseur" />
+			</p:submenu>
+			<p:submenu label=" matériel">
+				<p:menuitem value="Fiche Matériel"
+					action="#{materielMBean.redirect}" />
+			</p:submenu>
+			<p:submenu label="maintenance">
+				<p:menuitem value="Maintenance"
+					action="#{maintenanceMBean.redirect}" />
+			</p:submenu>
+		</p:submenu>
+		<p:submenu label="Matériau">
+		</p:submenu>
+	</p:panelMenu>
+</h:form>
+</html>

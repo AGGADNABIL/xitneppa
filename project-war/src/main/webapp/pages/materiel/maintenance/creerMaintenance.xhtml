@@ -1,0 +1,92 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg-maintenance"
+		widgetVar="create-dlg-maintenance"
+		header="#{prezmsg['MAINTENANCE.NOUVEAU']}" hideEffect="fade"
+		styleClass="dialogclass" showEffect="fade" modal="true" dynamic="true"
+		closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+			<h:panelGrid columns="3">
+
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.MATERIEL']}" />
+				<p:inputText id="materiel-create"
+					value="#{maintenanceMBean.webBean.vo.materiel}" />
+				<p:message for="materiel-create" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.CENTRE']}" />
+				<p:inputText id="centre-create"
+					value="#{maintenanceMBean.webBean.vo.centreMaintenance}" />
+				<p:message for="centre-create" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.MOTIF']}" />
+				<p:inputText id="motif-create"
+					value="#{maintenanceMBean.webBean.vo.motif}" />
+				<p:message for="motif-create" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.TECHNICIEN']}" />
+				<p:inputText id="technicien-create"
+					value="#{maintenanceMBean.webBean.vo.technicien}" />
+				<p:message for="technicien-create" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.FRAIS']}" />
+				<p:inputText id="frais-create"
+					value="#{maintenanceMBean.webBean.vo.frais}" />
+				<p:message for="frais-create" />
+				
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_DEBUT']}" />
+				<p:calendar id="dateDebut-create"
+					value="#{maintenanceMBean.webBean.vo.dateDebut}"
+					pattern="dd-MM-yyyy" mask="true" />
+				<p:message for="dateDebut-create" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DATE_FIN']}" />
+				<p:calendar id="dateFin-create"
+					value="#{maintenanceMBean.webBean.vo.dateFin}" pattern="dd-MM-yyyy"
+					mask="true" />
+				<p:message for="dateFin-create" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.DUREE']}" />
+				<p:inputText id="duree-create"
+					value="#{maintenanceMBean.webBean.vo.duree}" />
+				<p:message for="duree-create" />
+
+				 <h:outputLabel value="#{prezmsg['MAINTENANCE.PROB']}" />
+				<p:selectOneRadio id="prob-create" value="#{maintenanceMBean.webBean.vo.problemFrequent}">
+					<f:selectItem itemLabel="Oui" itemValue="#{true}" />
+					<f:selectItem itemLabel="Non" itemValue="#{false}" />
+				</p:selectOneRadio>
+				<p:message for="prob-create" />
+
+				<h:outputLabel value="#{prezmsg['MAINTENANCE.RAPPORT']}" />
+				<p:inputText id="rapport-create"
+					value="#{maintenanceMBean.webBean.vo.rapport}" />
+				<p:message for="rapport-create" /> 
+
+
+
+			</h:panelGrid>
+			<br />
+			<center>
+				<p:commandButton value="#{prezmsg['VALIDER']}"
+					action="#{maintenanceMBean.creer}" update=":formGLobal:maintenanceTbl"
+					styleClass="editButtons" />
+			</center>
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-maintenance').hide()"
+				update=":formGLobal:maintenanceTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

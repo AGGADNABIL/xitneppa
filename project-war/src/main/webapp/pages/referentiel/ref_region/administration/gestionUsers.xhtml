@@ -1,0 +1,166 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+			<p:fieldset legend="#{prezmsg['LIST_USERS']}"  >
+			<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+		<h:form id="formGLobal">
+			<!-- Remote commands -->
+			<p:remoteCommand name="_errorDialog"
+				onstart="PF('error-dlg-wdg').show()" />
+
+			<p:remoteCommand name="_updateCrudMenu" global="false"
+				update="crud-menu" />
+			<!--  -->
+
+			<div class="BackgroundGray">
+				<div class="RefCenter">
+					<p:menubar id="crud-menu">
+						<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+							value="#{prezmsg['NOUVEAU']}"
+							action="#{userEntityMBean.resetWebBeanVO}"
+							oncomplete="PF('create-dlg-etudiant').show();" />
+						<p:menuitem id="search" icon="ui-icon-custom-chercher"
+							value="#{prezmsg['CHERCHER']}" oncomplete="" />
+
+					
+					</p:menubar>
+
+					<p:dataTable id="usersTbl" paginator="true"
+						value="#{userEntitySearchMBean}" var="usr" lazy="true" 
+						 paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                		 rows="10" style="margin-bottom:20px">
+
+						<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+			
+				<!--       COLUMNS    -->
+					
+
+						<p:column headerText="#{prezmsg['NUM_SOLDE']}"  sortBy="#{usr.matr}" style="text-align:center">
+							<h:outputText value="#{usr.matr}" />
+						</p:column>
+
+						<p:column headerText="#{prezmsg['USERNAME']}" sortBy="#{usr.username}" >
+							<h:outputText value="#{usr.username}" />
+						</p:column>
+						
+						<p:column headerText="#{prezmsg['PASSWORD']}" sortBy="#{usr.password}" >
+							<h:outputText value="#{usr.password}"/>
+						</p:column>
+						
+						<p:column headerText="#{prezmsg['NOMNAISS']}" sortBy="#{usr.lastName}" >
+							<h:outputText value="#{usr.lastName}" />
+						</p:column>
+						
+						<p:column headerText="#{prezmsg['PRENOM']}" sortBy="#{usr.firstName}" >
+							<h:outputText value="#{usr.firstName}" />
+						</p:column>
+						
+						<p:column headerText="#{prezmsg['POPULATION']}" sortBy="#{usr.population}" >
+							<h:outputText value="#{usr.population}" />
+						</p:column>
+						
+						<p:column headerText="#{prezmsg['PROFIL_ACCES']}" sortBy="#{usr.profil}" >
+							<h:outputText value="#{usr.profil}" />
+						</p:column>
+
+						<p:column exportable="false" style="text-align:center;" headerText="#{prezmsg['ACTION']}">
+
+							<p:commandButton icon="ui-icon-custom-modifier"
+								update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+								styleClass="CrudButton">
+								<f:setPropertyActionListener value="#{usr}"
+									target="#{userEntityMBean.webBean.vo}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-custom-supprimer" update="usersTbl"
+								styleClass="CrudButton" oncomplete="PF('widget_deletedlg').show();"
+								action="#{userEntityMBean.supprimer}">
+								<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+									message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+									icon="ui-icon-alert" />
+								<f:setPropertyActionListener value="#{usr}"
+									target="#{userEntityMBean.webBean.vo}" />
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+
+				</div>
+			</div>
+		</h:form>
+		
+
+		<p:overlayPanel id="search-overlay" for=":formGLobal:search"
+			hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+			dismissable="false" appendToBody="true">
+
+			<h:form>
+
+				<h:panelGrid columns="4">
+
+					<!-- Matr -->
+					<h:outputLabel value="#{prezmsg['NUM_SOLDE']}" />
+					<p:inputText id="code-search"
+						value="#{userEntitySearchMBean.criteria.matr}" />
+
+					<!-- username  -->
+					<h:outputLabel value="#{prezmsg['USERNAME']}" />
+					<p:inputText 
+						value="#{userEntitySearchMBean.criteria.username}" />
+						
+					<!-- lastname  -->
+					<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+					<p:inputText 
+						value="#{userEntitySearchMBean.criteria.lastName}" />
+					<!-- firstname  -->
+					<h:outputLabel value="#{prezmsg['PRENOM']}" />
+					<p:inputText 
+						value="#{userEntitySearchMBean.criteria.firstName}" />
+					<!-- Population  -->
+					<h:outputLabel value="#{prezmsg['POPULATION']}" />
+					<p:inputText 
+						value="#{userEntitySearchMBean.criteria.population}" />
+					<!-- Profil  -->
+					<h:outputLabel value="#{prezmsg['PROFIL_ACCES']}" />
+					<p:inputText 
+						value="#{userEntitySearchMBean.criteria.profil}" />
+						
+						
+				   
+				</h:panelGrid>
+
+				<p:commandButton value="#{prezmsg['OK']}"
+					action="#{userEntitySearchMBean.run}" ajax="true"
+					update=":formGLobal:usersTbl"
+					onclick="PF('searchOverlay').hide();"  />
+
+			</h:form>
+
+		</p:overlayPanel>
+
+		<ui:include
+			src="/pages/referentiel/ref_region/administration/creerUser.xhtml"></ui:include>
+		<ui:include
+			src="/pages/referentiel/ref_region/administration/editerUser.xhtml"></ui:include>
+</p:fieldset>
+	</ui:define>
+</ui:composition>

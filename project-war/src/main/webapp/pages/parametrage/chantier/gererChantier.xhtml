@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+		<p:fieldset legend="#{prezmsg['PARAMETRAGE_CHANT']}">
+			<center>
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<p:graphicImage library="images" name="ajax-loader-1.gif" style="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</center>
+			<h:form id="formGLobal">
+
+
+				<!-- Remote commands -->
+				<p:remoteCommand name="_errorDialog"
+					onstart="PF('error-dlg-wdg').show()" />
+
+				<p:remoteCommand name="_updateCrudMenu" global="false"
+					update="crud-menu" />
+				<!--  -->
+				<div class="BackgroundGray">
+					<div class="RefCenter">
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{chantierMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-typeMateriel').show();" />
+							<p:menuitem id="search" icon="ui-icon-custom-chercher"
+								value="#{prezmsg['CHERCHER']}" />
+
+							<!-- 						<p:menuitem id="delete" value="#{prezmsg['SUPPRIMER']}" -->
+							<!-- 							icon="ui-icon-custom-supprimer-min" -->
+							<!-- 							disabled="#{empty TypeMaterielMBean.webBean.selectedVOs}" -->
+							<!-- 							action="#{TypeMaterielMBean.supprimer}" update="typeMaterielTbl"> -->
+							<!-- 						</p:menuitem> -->
+
+						</p:menubar>
+
+						<p:panelGrid columns="4" id="grl">
+							<h:outputLabel value="#{prezmsg['RERERENCE_CHANT']}" />
+							<h:panelGroup>
+								<p:inputText id="ref-create"
+									value="#{chantierMBean.webBean.vo.reference}" readonly="true" />
+								<p:message for="ref-create" />
+							</h:panelGroup>
+							<h:outputLabel value="#{prezmsg['PAYS_CHANT']}" />
+							<h:panelGroup>
+								<p:selectOneMenu id="pays-create"
+									value="#{paysMBean.selectPays}">
+									<p:ajax process="@this" update="vil-create" />
+									<f:selectItem itemLabel="Selectionner Pays" itemValue="0" />
+									<f:selectItems value="#{paysMBean.itemsPays}" />
+								</p:selectOneMenu>
+								<p:message for="pays-create" />
+							</h:panelGroup>
+							<h:outputLabel value="#{prezmsg['LIBELLE_CHANT']}" />
+							<h:panelGroup>
+								<p:inputText id="lib-create"
+									value="#{chantierMBean.webBean.vo.nom}" readonly="true" />
+								<p:message for="lib-create" />
+							</h:panelGroup>
+
+							<p:outputLabel for="etat" value="#{prezmsg['ETAT_CHANT']}" />
+							<p:selectOneRadio id="etat" value="#{chantierMBean.webBean.vo.etat}">
+								<f:selectItem itemLabel="Actif" itemValue="#{true}" />
+								<f:selectItem itemLabel="Passif" itemValue="#{false}" />
+							</p:selectOneRadio>
+
+							<h:outputLabel value="#{prezmsg['VILLE_CHANT']}" />
+							<h:panelGroup>
+								<p:selectOneMenu id="vil-create" value="#{adresseMBean.selectVille}">
+									<f:selectItem itemLabel="Selectionner Ville" itemValue="0" />
+									<f:selectItems value="#{adresseMBean.itemsVille}" />
+								</p:selectOneMenu>
+								<p:message for="vil-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['DATED_CHANT']}" />
+							<h:panelGroup>
+								<p:calendar id="datD-create"
+									value="#{chantierMBean.webBean.vo.date_debut}" readonly="true" />
+								<p:message for="datD-create" />
+							</h:panelGroup>
+							<h:outputLabel value="#{prezmsg['NBEMP_CHANT']}" />
+							<h:panelGroup>
+								<p:inputText id="nbemp-create"
+									value="#{chantierMBean.webBean.vo.nombre_employe}" />
+								<p:message for="nbemp-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['DATEF_CHANT']}" />
+							<h:panelGroup>
+								<p:calendar id="datF-create"
+									value="#{chantierMBean.webBean.vo.date_fin}" />
+								<p:message for="datF-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['RESP_CHANT']}" />
+							<h:panelGroup>
+								<p:selectOneMenu id="res-create"
+									value="#{chantierMBean.webBean.vo.responsable}">
+									<f:selectItem itemLabel="FARID" itemValue="FARID" />
+									<f:selectItem itemLabel="KAMAL" itemValue="KAMAL" />
+									<f:selectItem itemLabel="HASSAN" itemValue="HASSAN" />
+								</p:selectOneMenu>
+								<p:message for="res-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['ADRESSE_CHANT']}" />
+							<h:panelGroup>
+								<p:inputTextarea id="adr-create" value="" />
+								<p:message for="adr-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['BUDGET_CHANT']}" />
+							<h:panelGroup>
+								<p:inputText id="bud-create"
+									value="#{chantierMBean.webBean.vo.budget}" />
+								<p:message for="bud-create" />
+							</h:panelGroup>
+
+							<h:outputLabel value="#{prezmsg['DESCRIP_CHANT']}" />
+							<h:panelGroup>
+								<p:inputTextarea id="desc-create"
+									value="#{chantierMBean.webBean.vo.description}" />
+								<p:message for="desc-create" />
+							</h:panelGroup>
+						</p:panelGrid>
+
+						<p:dataTable id="typeMaterielTbl" paginator="true"
+							rowStyleClass="#{chant.statut == 'DISABLED' ? 'is-disabled' :null }"
+							value="#{chantiersSearchMBean}" var="chant" lazy="true"
+							selectionMode="single" rowKey="#{chant.id}"
+							selection="#{chantierMBean.webBean.vo}"
+							paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+							rows="10" style="margin-bottom:20px">
+							<!-- @author nabil  -->
+							<p:ajax event="rowSelect" listener="#{chantierMBean.onRowSelect}"
+								update=":formGLobal:grl">
+								<!--  <f:setPropertyActionListener target="#{chantierMBean.chV}" value="#{chant}"/> -->
+							</p:ajax>
+
+
+							<ui:include src="/pages/commun/datatableEvents.xhtml" />
+
+							<!-- EXPORTEURS -->
+							<f:facet name="{Exporters}">
+								<h:commandLink style="margin-left:70px">
+									<p:graphicImage library="images" name="icons/excel.png"
+										width="24" />
+									<p:dataExporter type="xls" target="typeMaterielTbl"
+										fileName="chant" />
+								</h:commandLink>
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/pdf.png"
+										width="24" />
+									<p:dataExporter type="pdf" target="typeMaterielTbl"
+										fileName="chant" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/csv.png"
+										width="24" />
+									<p:dataExporter type="csv" target="typeMaterielTbl"
+										fileName="chant" />
+								</h:commandLink>
+
+								<h:commandLink>
+									<p:graphicImage library="images" name="icons/xml.png"
+										width="24" />
+									<p:dataExporter type="xml" target="typeMaterielTbl"
+										fileName="chant" />
+								</h:commandLink>
+
+							</f:facet>
+							<!--       COLUMNS    -->
+
+							<p:column headerText="#{prezmsg['RERERENCE_CHANT']}">
+								<h:outputText value="#{chant.reference}" />
+							</p:column>
+
+							<!-- Libellé de la nationalité -->
+							<p:column headerText="#{prezmsg['LIBELLE_CHANT']}">
+								<h:outputText value="#{chant.nom}" />
+							</p:column>
+
+
+							<p:column headerText="#{prezmsg['DATED_CHANT']}">
+								<h:outputText value="#{chant.date_debut}" />
+							</p:column>
+
+
+							<p:column headerText="#{prezmsg['DATEF_CHANT']}">
+								<h:outputText value="#{chant.date_fin}" />
+							</p:column>
+
+
+							<p:column headerText="#{prezmsg['RESP_CHANT']}">
+								<h:outputText value="#{chant.responsable}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['BUDGET_CHANT']}">
+								<h:outputText value="#{chant.budget}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['DESCRIP_CHANT']}">
+								<h:outputText value="#{chant.description}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['VILLE_CHANT']}">
+								<h:outputText value="#{chant.adresse.ville}" />
+							</p:column>
+
+							<p:column headerText="#{prezmsg['NBEMP_CHANT']}">
+								<h:outputText value="#{chant.nombre_employe}" />
+							</p:column>
+
+							<p:column exportable="false" style="text-align:center;"
+								headerText="#{prezmsg['ACTION']}">
+
+								<p:commandButton icon="ui-icon-custom-modifier"
+									update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+									styleClass="CrudButton">
+									<f:setPropertyActionListener value="#{chant}"
+										target="#{chantierMBean.webBean.vo}" />
+								</p:commandButton>
+
+								<p:commandButton icon="ui-icon-custom-supprimer"
+									update="typeMaterielTbl" styleClass="CrudButton"
+									oncomplete="PF('widget_deletedlg').show();"
+									action="#{chantierMBean.supprimer}">
+									<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}"
+										message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+										icon="ui-icon-alert" />
+									<f:setPropertyActionListener value="#{chant}"
+										target="#{chantierMBean.webBean.vo}" />
+								</p:commandButton>
+
+							</p:column>
+
+						</p:dataTable>
+
+					</div>
+				</div>
+			</h:form>
+			<ui:include src="/pages/parametrage/chantier/creerChantier.xhtml" />
+			<ui:include src="/pages/parametrage/chantier/editerChantier.xhtml" />
+		</p:fieldset>
+	</ui:define>
+</ui:composition>

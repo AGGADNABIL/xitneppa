@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg-profil" widgetVar="create-dlg-profil"
+		header="#{prezmsg['AJOUT_PROFIL']}" hideEffect="fade" styleClass="dialogclass"
+		showEffect="fade" modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+
+			
+			
+			
+				<h:outputLabel value="#{prezmsg['CODE']}" />
+				<p:inputText id="nom-create"
+					value="#{profilAccMBean.webBean.vo.codeProAcc}" />
+				<p:message for="nom-create" />
+
+		
+				<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+				<p:inputText id="prenom-create"
+					value="#{profilAccMBean.webBean.vo.libPro}" />
+				<p:message for="prenom-create" />
+				
+
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{profilAccMBean.creer}" update="@form"
+				/></center>
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-profil').hide()"
+				update=":formGLobal:profilTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

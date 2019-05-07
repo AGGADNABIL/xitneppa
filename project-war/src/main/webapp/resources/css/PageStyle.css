@@ -1,0 +1,108 @@
+/*colors:
+	f8d81f : doré
+	4f4e51 : gris
+	b2b4b5 : gris light
+	e8511d : orange
+*/
+html {
+	padding:0; 
+	margin:0; 
+	border:0; 
+	font: normal 12px Myriad Pro Verdana, Geneva, sans-serif;
+}
+
+/* body { */
+/* 	padding:0;  */
+/* 	margin:0;  */
+/* 	border:0; */
+/* } */
+
+/* #LaPage{ */
+/* 	float:left; */
+/* 	padding:0;  */
+/* 	margin:0;  */
+/* 	border:0; */
+/* 	width:100%; */
+/* 	border:solid 0px green; */
+/* 	display:table; */
+/* } */
+/* #LeMenu{ */
+/* 	width:326px; */
+/* 	float:left; */
+/* 	border:solid 0px red; */
+/* } */
+
+
+
+/* #LeContenu{ */
+/* 	margin-left:326px; */
+/* 	margin-top:25px; */
+/* 	border:solid 0px blue; */
+/* 	padding-bottom:20px; */
+/* } */
+/* #header{ */
+/* 	background:URL(../images/bordure_03.gif) repeat-x; */
+/* 	height:6px; */
+/* 	width:100%; */
+/* 	margin-bottom:10px; */
+/* } */
+/* #userConnected{ */
+/* 	height:98px; */
+/* 	font: bold 18px Myriad Pro Verdana, Geneva, sans-serif; */
+/* 	color:#555; */
+/* 	padding-top:50px; */
+/* } */
+/* #headerSeparateur{ */
+/* 	background:URL(../images/bordure_07.png) no-repeat center; */
+/* 	height:98px; */
+/* 	width:10px; */
+/* 	margin-bottom:20px; */
+/* 	float:right; */
+/* 	margin-right:30px; */
+/* 	margin-left:30px; */
+/* } */
+/* #logo{ */
+/* 	height:98px; */
+/* 	/*background:#FC3;*/ */
+/* 	float:right; */
+/* } */
+/* #pied{ */
+/* 	background:URL(../images/bordure_10.png) repeat-x center; */
+/* 	width:100%; */
+/* 	height:60px; */
+	
+/* } */
+
+/* #titre{ */
+/* 	width:190px; height:20px; */
+/* 	border:solid 0px red; */
+/* 	position:relative; */
+/* 	margin:10px 0 30px 34px; */
+/* 	padding:0 10px 0 10px; */
+/* 	font: bold 14px Myriad Pro Verdana, Geneva, sans-serif; */
+/* 	color:#e8511d; */
+/* } */
+/* *html #titre{ */
+/* 	width:210px; height:34px; */
+/* } */
+
+/* #separateur{ */
+/* 	height:2px; width:230px; background:#4f4e51; display:compact; */
+/* 	border:solid 0px white; */
+/* 	font: 0px  Verdana, Geneva, sans-serif; */
+/* } */
+
+
+#menu_footer{
+	width:210px;
+	border:solid 0px red;
+	position:relative;
+	margin:10px 0 10px 24px;
+	padding:0 10px 0 10px;
+	font:8px Verdana, Geneva, sans-serif;
+	color:#666;
+	text-align:justify;
+}
+*html #menu_footer{
+	width:230px;
+}

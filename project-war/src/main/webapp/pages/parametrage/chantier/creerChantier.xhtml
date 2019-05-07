@@ -1,0 +1,99 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="create-dlg" widgetVar="create-dlg-typeMateriel"
+		header="#{prezmsg['NOUVEAU_CHANTIER']}" hideEffect="fade" styleClass="dialogclass"
+		showEffect="fade" modal="true" dynamic="true" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+			
+				<h:outputLabel value="#{prezmsg['RERERENCE_CHANT']}" />
+				<p:inputText id="reference-create"
+					value="#{chantierMBean.webBean.vo.reference}" />
+				<p:message for="reference-create" />
+
+		
+				<h:outputLabel value="#{prezmsg['LIBELLE_CHANT']}" />
+				<p:inputText id="libelle-create"
+					value="#{chantierMBean.webBean.vo.nom}" />
+				<p:message for="libelle-create" />
+				
+				<p:outputLabel for="etat-create" value="#{prezmsg['ETAT_CHANT']}" />
+				  <p:selectOneRadio id="etat-create" value="#{chantierMBean.webBean.vo.etat}">
+					 <f:selectItem itemLabel="Actif" itemValue="#{true}" />
+					<f:selectItem itemLabel="Passif" itemValue="#{false}" />
+				 </p:selectOneRadio>
+				 <p:outputLabel />
+
+				<h:outputLabel value="#{prezmsg['DATED_CHANT']}" />
+				<p:calendar id="dateD-create"
+					value="#{chantierMBean.webBean.vo.date_debut}" />
+				<p:message for="dateD-create" />
+				
+				<h:outputLabel value="#{prezmsg['DATEF_CHANT']}" />
+				<p:calendar id="dateF-create"
+					value="#{chantierMBean.webBean.vo.date_fin}" />
+				<p:message for="dateF-create" />
+				
+				<h:outputLabel value="#{prezmsg['RESP_CHANT']}" />
+				<p:selectOneMenu id="resp-create" value="#{chantierMBean.webBean.vo.responsable}">
+				   <f:selectItem itemLabel="FARID" itemValue="FARID"/>
+				   <f:selectItem itemLabel="KAMAL" itemValue="KAMAL"/>
+				   <f:selectItem itemLabel="HASSAN" itemValue="HASSAN"/>   
+				</p:selectOneMenu>
+				<p:message for="resp-create" />
+				
+				<h:outputLabel value="#{prezmsg['BUDGET_CHANT']}" />
+				<p:inputText id="budget-create"
+					value="#{chantierMBean.webBean.vo.budget}" />
+				<p:message for="budget-create" />
+				
+				<h:outputLabel value="#{prezmsg['DESCRIP_CHANT']}" />
+				<p:inputTextarea id="descrip-create"
+					value="#{chantierMBean.webBean.vo.description}" />
+				<p:message for="descrip-create" />
+				 
+				     <h:outputLabel value="#{prezmsg['PAYS_CHANT']}" />
+					         <p:selectOneMenu id="pays-create" value="#{paysMBean.selectPays}" >
+					             <p:ajax  process="@this" update="vil-create"/>
+					                <f:selectItem  itemLabel="Selectionner Pays" itemValue="0"/>
+								    <f:selectItems value="#{paysMBean.itemsPays}"/>
+							 </p:selectOneMenu>
+						<p:message for="pays-create" />
+			  
+			    <h:outputLabel value="#{prezmsg['VILLE_CHANT']}"  />
+						<p:selectOneMenu id="vil-create" value="#{adresseMBean.selectVille}" >
+						<f:selectItem  itemLabel="Selectionner Ville" itemValue="0"/>
+						<f:selectItems  value="#{adresseMBean.itemsVille}"/>
+						</p:selectOneMenu>
+						<p:message for="vil-create" />
+				
+				<h:outputLabel value="#{prezmsg['NBEMP_CHANT']}" />
+				<p:inputText id="nbemploy-create"
+					value="#{chantierMBean.webBean.vo.nombre_employe}" />
+				<p:message for="nbemploy-create" />
+								
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{chantierMBean.creer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('create-dlg-typeMateriel').hide()"
+				update=":formGLobal:typeMaterielTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

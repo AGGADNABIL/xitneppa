@@ -1,0 +1,234 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+
+	<ui:define name="header">
+		<ui:include src="/pages/commun/menu.xhtml" />
+	</ui:define>
+
+	<ui:define name="content">
+			<p:fieldset legend="#{prezmsg['PROFIL_DROIT_ACCES']}"  >
+			<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+		<h:form id="formGLobal">
+			<!-- Remote commands -->
+			<p:remoteCommand name="_errorDialog"
+				onstart="PF('error-dlg-wdg').show()" />
+
+			<p:remoteCommand name="_updateCrudMenu" global="false"
+				update="crud-menu" />
+			<!--  -->
+				<div class="BackgroundGray">
+				<div class="RefCenter">
+			<center>
+			<p:fieldset  styleClass="fieldset2" legend="Profil">	
+					<p:menubar id="crud-menu2">					
+						<p:menuitem id="search" icon="ui-icon-custom-chercher"
+							value="#{prezmsg['CHERCHER']}" oncomplete="" />										
+					</p:menubar>
+
+						<p:dataTable id="profilTbl" paginator="true"					
+						value="#{profilAccSearchMBean}" var="prof" lazy="true" rows="5"
+						selection="#{profilMenuMBean.webBean.profil}" selectionMode="single"
+						rowKey="#{prof.id}" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}"
+                		  style="margin-bottom:5px">
+
+				<!--       COLUMNS    -->
+
+
+								<p:ajax event="rowSelect" 
+								listener="#{profilMenuMBean.fetchMenuForProfil}"
+								update=":formGLobal:root-dtbl :formGLobal:menus-dtbl" />
+	
+
+						<p:column headerText="#{prezmsg['CODE']}" sortBy="#{prof.codeProAcc}" style="text-align:center;width:30%">
+							<h:outputText value="#{prof.codeProAcc}" />
+						</p:column>
+
+						<p:column headerText="#{prezmsg['LIBELLE']}" sortBy="#{prof.libPro}" >
+							<h:outputText value="#{prof.libPro}" />
+						</p:column>
+
+
+					</p:dataTable>
+			</p:fieldset>
+					<p:commandButton value=" #{prezmsg['MENU_PAR_DEFAUT']}" style="width:30%" action="#{profilMenuMBean.importerMenu}" update=":formGLobal:menus-dtbl :formGLobal:root-dtbl">
+						<p:confirm header="#{prezmsg['CONFIRMATION_IMPORT']}" 
+									message="#{prezmsg['MSG_CONFIRMATION_IMPORT']}"
+									icon="ui-icon-alert"  />
+					</p:commandButton>
+		
+				<br/>
+				    <p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+				    <center>
+			<p:fieldset  styleClass="fieldset4" >	
+				<p:dataTable id="root-dtbl" rows="1" 
+							value="#{profilMenuMBean.webBean.root}" var="r"
+							 selection="#{profilMenuMBean.webBean.selectedRoot}" selectionMode="single"  rowKey="#{r.menuMenu}">
+						
+						<p:ajax event="rowSelect" 
+								listener="#{profilMenuMBean.listerSousMenus}"
+								update=":formGLobal:menus-dtbl" />
+							 <f:facet name="header">
+								<p:outputLabel value="#{prezmsg['MENUS']}" style="font-size:16px;color: #575757;font-weight:bold" />
+  							  </f:facet>
+					<!--     CODE MENU -->
+							<p:column headerText="#{prezmsg['MENU']}"
+								style="text-align:center" width="10%">
+								<h:outputLabel value="#{r.menuMenu}" />
+							</p:column>
+					<!--     LIBELLE root -->
+                            <p:column headerText="#{prezmsg['LIBELLE']}" width="30%">
+								<h:outputLabel value="#{r.libMenu}" />
+							</p:column>
+					<!--    RANG -->
+                           <p:column headerText="#{prezmsg['RANG']}" width="5%" style="text-align:center">
+								<h:outputLabel value="#{r.rang}" />
+							</p:column>	
+					<!--    FORMULAIRE -->
+                           <p:column headerText="#{prezmsg['FORMULAIRE']}" width="32%" >
+								<h:outputLabel value="#{r.forma}" />
+							</p:column>	
+					<!--    VISIBLE -->
+                           <p:column headerText="#{prezmsg['VISIBLE']}" width="5%" style="text-align:center" >
+								<h:outputLabel value="#{r.valid}" />
+							</p:column>		
+						<!--    CONSULTATION -->
+                           <p:column headerText="C/M" width="5%" style="text-align:center">
+								<h:outputLabel value="#{r.droit}" />
+							</p:column>							<!--    MODULES -->
+                           <p:column headerText="MODULES" width="8%" style="text-align:center">
+								<p:commandButton value=" \/" style="width:100%" action="#{profilMenuMBean.updateChild}" update=":formGLobal:menus-dtbl :formGLobal:root-dtbl" validateClient="true">
+									 <f:setPropertyActionListener target="#{profilMenuMBean.webBean.vo}" value="#{r}" />								
+								 </p:commandButton>
+							</p:column>							
+							
+         
+						</p:dataTable>
+					</p:fieldset></center>
+					<p:fieldset  styleClass="fieldset4" >
+											
+						<p:menubar id="crud-menu">
+							<p:menuitem id="create" icon="ui-icon-custom-nouveau"
+								value="#{prezmsg['NOUVEAU']}"
+								action="#{profilMenuMBean.resetWebBeanVO}"
+								oncomplete="PF('create-dlg-menu').show();" />
+<!-- 							<p:menuitem id="search" icon="ui-icon-custom-chercher" -->
+<!-- 								value="#{prezmsg['CHERCHER']}" oncomplete="" /> -->
+						</p:menubar>
+						
+				<p:dataTable id="menus-dtbl" paginator="true" rows="5" 
+							value="#{profilMenuMBean.webBean.vos}" var="menu"  
+							paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							rowsPerPageTemplate="5,10,20"
+							paginatorPosition="bottom"
+							currentPageReportTemplate="Affichant {startRecord} - {endRecord} de 
+      				 	   {totalRecords}, Page: {currentPage}/{totalPages}">
+							 <f:facet name="header" >
+					<p:outputLabel value="#{prezmsg['SOUS_MENUS']}" style="font-size:16px;color: #575757;font-weight:bold" /> 
+  							  </f:facet>
+					<!--     CODE MENU -->
+							<p:column headerText="#{prezmsg['MENU']}"
+								style="text-align:center" width="10%" sortBy="#{menu.menuMenu}">
+								<h:outputLabel value="#{menu.menuMenu}" />
+							</p:column>
+					<!--     LIBELLE menu -->
+                            <p:column headerText="#{prezmsg['LIBELLE']}" sortBy="#{menu.libMenu}" width="25%">
+								<h:outputLabel value="#{menu.libMenu}" />
+							</p:column>
+					<!--    RANG -->
+                           <p:column headerText="#{prezmsg['RANG']}" sortBy="#{menu.rang}" width="5%" style="text-align:center">
+								<h:outputLabel value="#{menu.rang}" />
+							</p:column>	
+					<!--    FORMULAIRE -->
+                           <p:column headerText="#{prezmsg['FORMULAIRE']}" sortBy="#{menu.forma}"  width="27%" >
+								<h:outputLabel value="#{menu.forma}" />
+							</p:column>	
+						<!--    VISIBLE -->
+                           <p:column headerText="#{prezmsg['VISIBLE']}" width="5%" style="text-align:center" >
+								<h:outputLabel value="#{menu.valid}" />
+							</p:column>		
+						<!--    CONSULTATION -->
+                           <p:column headerText="C/M" width="5%" style="text-align:center">
+								<h:outputLabel value="#{menu.droit}" />
+							</p:column>	
+						<!--    MODULES -->
+                           <p:column headerText="MODULES" width="8%" style="text-align:center">
+								<p:commandButton value=" /\" style="width:100%" action="#{profilMenuMBean.updateRoot}" update=":formGLobal:menus-dtbl :formGLobal:root-dtbl">
+								  <f:setPropertyActionListener target="#{profilMenuMBean.webBean.vo}" value="#{menu}" />
+								</p:commandButton>
+							</p:column>							
+							
+                      <!--	ACTION -->
+                      
+                      	<p:column exportable="false" style="text-align:center;" headerText="#{prezmsg['ACTION']}" width="10%">
+
+							<p:commandButton icon="ui-icon-custom-modifier"
+								update=":edit-dlg" oncomplete="PF('edit-dlg-wdg').show();"
+								styleClass="CrudButton">
+								<f:setPropertyActionListener value="#{menu}"
+									target="#{profilMenuMBean.webBean.vo}" />
+							</p:commandButton>
+
+							<p:commandButton icon="ui-icon-custom-supprimer" update="@form" 
+								styleClass="CrudButton" oncomplete="PF('widget_deletedlg').show();"
+								action="#{profilMenuMBean.supprimer}">
+								<p:confirm header="#{prezmsg['CONFIRMATION_DELETE']}" 
+									message="#{prezmsg['MESSAGE_CONFIRMATION_DELETE']}"
+									icon="ui-icon-alert"  />
+								<f:setPropertyActionListener value="#{menu}"
+									target="#{profilMenuMBean.webBean.vo}" />
+							</p:commandButton>
+
+						</p:column>
+						</p:dataTable>
+						</p:fieldset>
+				</center>	
+				</div>
+			</div>
+		</h:form>
+		
+
+		<p:overlayPanel id="search-overlay" for=":formGLobal:search"
+			hideEffect="slide" showEffect="slide" widgetVar="searchOverlay"
+			dismissable="false" appendToBody="true">
+
+			<h:form>
+				<h:panelGrid columns="4">
+					<!-- Code  -->
+					<h:outputLabel value="#{prezmsg['CODE']}" />
+					<p:inputText id="code-search"
+						value="#{profilAccSearchMBean.criteria.codeProAcc}" />
+
+					<!-- Libellé   -->
+					<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+					<p:inputText id="lib-search"
+						value="#{profilAccSearchMBean.criteria.libPro}" />
+				</h:panelGrid>
+
+				<p:commandButton value="#{prezmsg['OK']}"
+					action="#{profilAccSearchMBean.run}" ajax="true"
+					update=":formGLobal:profilTbl"
+					onclick="PF('searchOverlay').hide();"  />
+
+			</h:form>
+
+		</p:overlayPanel>
+	
+</p:fieldset>
+<ui:include
+			src="/pages/referentiel/ref_region/administration/creerMenu.xhtml"></ui:include>
+		<ui:include
+			src="/pages/referentiel/ref_region/administration/editerMenu.xhtml"></ui:include>
+	</ui:define>
+</ui:composition>

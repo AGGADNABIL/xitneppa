@@ -1,0 +1,79 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_SERVICE']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form id="form4">
+
+			<h:panelGrid columns="3">
+		
+				<h:outputLabel value="#{prezmsg['CODE_SERV']}" />
+				<p:inputText id="code-edit" readonly="true"
+					value="#{servicesCategMBean.webBean.vo.codeService}" />
+				<p:commandButton icon="ui-icon-custom-nouveau" type="button"
+							onclick="PF('ajouterServiceM-dlg-wdg').show()" />
+		
+				<h:outputLabel value="#{prezmsg['LIB_SERV']}" />
+				<p:inputText id="lib-edit" readonly="true"
+					value="#{servicesCategMBean.webBean.vo.libelleService}" />
+                <p:spacer/>
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{servicesCategMBean.editer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":formGLobal:services-dtbl" />
+
+		</h:form>
+
+<!-- 			DIALOG SERVICES     -->
+			<p:dialog id="ajouterServiceM-dlg" width="900" height="400" header="Ajouter un service" appendTo="@(body)"
+				widgetVar="ajouterServiceM-dlg-wdg" modal="true">
+				<center>
+				<h:form id="form5">
+				<h:panelGrid columns="6" id="searchGrid4">
+							<h:outputLabel value="#{prezmsg['CODE']}" />
+							<p:inputText value="#{servicesSearchMBean.serviceCriteria.codeService}"/>
+							
+							<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+							<p:inputText value="#{servicesSearchMBean.serviceCriteria.libelleService}"/>
+							<br></br>
+
+							<p:commandButton id="search" icon="ui-icon-custom-chercher"
+							 action="#{servicesSearchMBean.run}" ajax="true"
+							update=":form5:service-dtbl" />
+						</h:panelGrid>
+						<p:dataTable id="service-dtbl" paginator="true" lazy="true" rows="5"  rowKey="#{p.codeService}" selectionMode="single"
+							value="#{servicesSearchMBean}" var="p" paginatorPosition="bottom"
+							selection="#{servicesCategMBean.webBean.selectedService}">
+							
+							<p:ajax event="rowDblselect" listener="#{servicesCategMBean.onRowDblClckSelect}" update=":form4:code-edit :form4:lib-edit" oncomplete="PF('ajouterServiceM-dlg-wdg').hide()"/>
+							<p:column headerText="#{prezmsg['CODE']}" sortBy="#{p.codeService}">
+								<h:outputText value="#{p.codeService}" />
+							</p:column>
+							<p:column headerText="#{prezmsg['LIBELLE']}"  sortBy="#{p.libelleService}">
+								<h:outputText value="#{p.libelleService}" />
+							</p:column>
+							
+						</p:dataTable>
+				</h:form>
+			</center>
+          </p:dialog>
+
+	</p:dialog>
+
+</ui:composition>

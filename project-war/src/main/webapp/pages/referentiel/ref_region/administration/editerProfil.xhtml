@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_PROFIL']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true" styleClass="dialogclass"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+	
+				<h:outputLabel value="#{prezmsg['CODE']}" />
+				<p:inputText id="nom-edit"
+					value="#{profilAccMBean.webBean.vo.codeProAcc}" />
+				<p:message for="nom-edit" />
+
+		
+				<h:outputLabel value="#{prezmsg['LIBELLE']}" />
+				<p:inputText id="prenom-edit"
+					value="#{profilAccMBean.webBean.vo.libPro}" />
+				<p:message for="prenom-edit" />
+
+			</h:panelGrid>
+			<br/>
+             <center>
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{profilAccMBean.editer}" update="@form"
+				styleClass="editButtons" /></center>
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":formGLobal:profilTbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

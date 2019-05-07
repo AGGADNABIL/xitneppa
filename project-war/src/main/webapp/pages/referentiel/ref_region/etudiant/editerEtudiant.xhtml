@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	<p:dialog id="edit-dlg" widgetVar="edit-dlg-wdg"
+		header="#{prezmsg['EDITER_NATIONALITE']}" hideEffect="fade"
+		showEffect="fade" modal="true" dynamic="true"
+		onHide="PF('edit-dlg').content.empty" closeOnEscape="true">
+
+		<p:messages globalOnly="true" autoUpdate="true" />
+
+		<h:form>
+
+			<h:panelGrid columns="3">
+
+			    <h:outputLabel value="#{prezmsg['ID_ETUDIANT']}" />
+				<p:inputText id="id-edit"
+					value="#{etudiantsMBean.webBean.vo.idEtudiant}" />
+				<p:message for="id-edit" />
+
+			
+				<h:outputLabel value="#{prezmsg['NOMNAISS']}" />
+				<p:inputText id="nom-edit"
+					value="#{etudiantsMBean.webBean.vo.nomNaissEtudiant}" />
+				<p:message for="nom-edit" />
+
+		
+				<h:outputLabel value="#{prezmsg['PRENOM']}" />
+				<p:inputText id="prenom-edit"
+					value="#{etudiantsMBean.webBean.vo.prenomEtudiant}" />
+				<p:message for="prenom-edit" />
+
+			</h:panelGrid>
+
+			<p:commandButton value="#{prezmsg['VALIDER']}"
+				action="#{etudiantsMBean.editer}" update="@form"
+				styleClass="editButtons" />
+
+			<!-- Cache le dialog s'il n'y a pas d'érreur -->
+			<p:remoteCommand name="_hideDialog"
+				oncomplete="PF('edit-dlg-wdg').hide()"
+				update=":etudiant-form:etudiant-dtbl" />
+
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

@@ -1,0 +1,158 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions"
+	template="/pages/commun/layout.xhtml">
+	<head>
+</head>
+
+	<ui:define name="content">
+        <p:fieldset legend="#{prezmsg['GESTION_VISITEUR']}">
+        	<center><p:ajaxStatus>
+				<f:facet name="start">
+				  <p:graphicImage library="images" name="ajax-loader-1.gif" style=""/>
+				</f:facet>
+			</p:ajaxStatus></center>
+          <p:messages autoUpdate="true" globalOnly="true"/>
+	  <h:form id="verification">     
+              <h:panelGrid columns="2" cellpadding="2" cellspacing="4" id="informations" style="padding-left:40px;">
+	        
+<!--      NOM DE NAISSANCE     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['NOMNAISS']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="j_nom"  value="#{visiteurMBean.webBean.vo.nomNaissance}"  />
+	     </p:column>     
+		<p:column>
+	       <h:outputLabel value="#{prezmsg['PRENOM']}"/>  
+	    </p:column> 
+	    <p:column>  
+	        <h:inputText id="j_prenom"  value="#{visiteurMBean.webBean.vo.prenom}" />
+	     </p:column>
+	     <!--      NOM MARITAL     -->
+		<p:column>
+	        <h:outputLabel value="#{prezmsg['NOM_MARITAL']}"/>  
+		</p:column>	
+		<p:column>		       
+	        <h:inputText id="j_nom_mar"  value="#{visiteurMBean.webBean.vo.nomMarital}" />
+	     </p:column>   
+<!-- 	  SEXE         -->   
+          <p:column>
+	        <h:outputLabel value="#{prezmsg['SEXE']}"/>  
+	      </p:column>
+	      <p:column>
+	        <p:selectOneRadio id="sexe" value="#{visiteurMBean.webBean.vo.sexe}">
+            <f:selectItem itemLabel="Femme" itemValue="F" />
+            <f:selectItem itemLabel="Homme" itemValue="H" />
+            </p:selectOneRadio>
+	       </p:column>
+<!-- 	    DATE DE NAISSANCE       -->
+           <p:column>           
+	        <h:outputLabel value="#{prezmsg['DATENAISS']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button" value="#{visiteurMBean.webBean.vo.dateNaissance}" pattern="dd/MM/yyyy" showOn="button" />
+	         </p:column> 
+<!-- 	     LIEU DE NAISSANCE     -->
+            <p:column>           
+	          <h:outputLabel value="#{prezmsg['LIEUNAISS']}"/> 
+	         </p:column>
+	         <p:column>            
+	          <h:inputText id="j_lieu"  value="#{visiteurMBean.webBean.vo.lieuNaissance}" />
+	          </p:column>
+<!-- 	         NATIONALITE       -->
+              <p:column>                         
+	            <h:outputLabel value="#{prezmsg['NATIONALITE']}"/> </p:column> 
+	          <p:column>                         	       
+	            <h:inputText id="j_nationalite"  value="#{visiteurMBean.webBean.vo.nationalite}" maxlength="40"/>
+	          </p:column>
+<!-- 	         CNI       -->
+              <p:column>                         
+	            <h:outputLabel value="CNI"/> </p:column> 
+	          <p:column>                         	       
+	            <h:inputText id="cni"  value="#{visiteurMBean.webBean.vo.cni}" maxlength="14"/>
+	          </p:column>
+
+            <!-- 	    ENTITE DE PROVENANCE     -->
+          <p:column>           
+	        <h:outputLabel value="#{prezmsg['ENTITE_PROV']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	         <h:inputText id="entite"  value="#{visiteurMBean.webBean.vo.entiteProv}" />	        
+	      </p:column> 	          
+ 		
+	      	<!-- 	   FONCTION      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['FONCTION']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="classif"  value="#{visiteurMBean.webBean.vo.fonction}" />
+	      </p:column> 
+	      
+	      	<!-- 	   STRUCTURE D'ACCEUIL     -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['STRUCT_ACCEUIL']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <h:inputText id="affect"  value="#{visiteurMBean.webBean.vo.structAcceuil}" maxlength="100"/>
+	      </p:column> 
+	      <!-- 	   OBJET      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['OBJET_PRES']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	           <p:inputTextarea id="grade"  value="#{visiteurMBean.webBean.vo.objet}" />
+	      </p:column> 
+	      <!-- 	   DATE DEBUT      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['DATE_DEB_CARTE']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button3" value="#{visiteurMBean.webBean.vo.dateDebut}" pattern="dd/MM/yyyy" showOn="button" />
+	      </p:column>    
+	      <!--     DATE FIN      -->
+	     <p:column>           
+        <h:outputLabel value="#{prezmsg['DATE_FIN_CARTE']}"/>  
+	       </p:column>
+	       <p:column>           	       
+	        <p:calendar id="button4" value="#{visiteurMBean.webBean.vo.dateFin}" pattern="dd/MM/yyyy" showOn="button" />
+	      </p:column>                
+	      </h:panelGrid>
+     
+       
+       <h:panelGrid columns="4" cellpadding="4" cellspacing="8" style="padding-left:20%">
+           <center>
+        	 <p:column><p:commandButton  id="valider" value="#{prezmsg['VALIDER_INFO']}"
+				       action="#{visiteurMBean.creer}" update="verification" style="width:120px;">
+					         <p:confirm header="Confirmation" message="#{prezmsg['CONFIRMER_AJOUT']}" />
+					 </p:commandButton>
+			 </p:column>
+       		  <p:column>
+         			<p:commandButton  id="acquisition" value="#{prezmsg['AQUIS_IMG']}"				       
+					 update="verification" style="width:180px;"/>
+         	
+         	</p:column>
+         	
+         	<p:column><p:commandButton  id="imprimer" value="#{prezmsg['IMPRIMER']}"
+				       action="#{visiteurMBean.impression}" style="width:120px;">
+				         <p:confirm header="Confirmation" message="#{prezmsg['CONFIRMER_IMPRESSION']}" />
+					 </p:commandButton>
+			 </p:column>
+        	 
+        	 
+         </center>
+        </h:panelGrid>      
+            <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+      			  <p:commandButton value="Oui" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+       			   <p:commandButton value="Non" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+  		    </p:confirmDialog>       
+	 </h:form>					
+	</p:fieldset>
+  </ui:define>
+</ui:composition>
+
